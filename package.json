@@ -1,0 +1,32 @@
+{
+  "name": "imitate-zheye",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "start": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "lint:fix": "eslint src --fix",
+    "lint:create": "eslint --init",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "cz-conventional-changelog-zh": "^0.0.2",
+    "vue": "^3.2.25"
+  },
+  "config": {
+    "commitizen": {
+       "path": "./node_modules/cz-conventional-changelog-zh"
+    }
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.22.0",
+    "@typescript-eslint/parser": "^5.22.0",
+    "@vitejs/plugin-vue": "^2.3.1",
+    "eslint": "^8.15.0",
+    "eslint-plugin-vue": "^8.7.1",
+    "typescript": "^4.5.4",
+    "vite": "^2.9.7",
+    "vite-plugin-eslint": "^1.6.0",
+    "vue-tsc": "^0.34.7"
+  }
+}
