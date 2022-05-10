@@ -38,7 +38,6 @@ module.exports = {
     'no-template-curly-in-string': 'error', // 禁止在常规字符串中出现模板字符串语法${xxx}
     // --以下是Best Practices 最佳实践
     'default-case': 'error', // 强制switch要有default分支
-    'dot-location': ['error', 'property'], // 要求对象的点要跟属性同一行
     'no-else-return': 'error', // 禁止在else前有return，return和else不能同时存在
     'no-empty-function': 'error', // 禁止出现空函数，有意而为之的可以在函数内部加条注释
     'no-multi-spaces': 'error', // 禁止出现多个空格，如===前后可以有一个空格，但是不能有多个空格
@@ -72,7 +71,6 @@ module.exports = {
     'no-unneeded-ternary': 'error', // 禁止多余的三元表达式，如a === 1 ? true : false应缩写为a === 1
     'no-whitespace-before-property': 'error', // 禁止属性前有空白，如console. log(obj['a'])，log前面的空白有问题
     'nonblock-statement-body-position': 'error', // 强制单行语句不换行
-    'object-curly-newline': ['error', { 'multiline': true }], // 对象数属性要有一致的换行，都换行或都不换行
     'object-curly-spacing': ['error', 'always'], // 强制对象/解构赋值/import等花括号前后有空格
     'object-property-newline': ['error', { 'allowAllPropertiesOnSameLine': true }], // 强制对象的属性在同一行或全换行
     'one-var-declaration-per-line': 'error', // 强制变量初始化语句换行
