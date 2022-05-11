@@ -6,10 +6,18 @@
 </template>
 <script lang="ts">
 import { defineComponent, reactive, PropType } from 'vue'
-const emailReg = new RegExp('/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(.[a-zA-Z0-9_-]+)+/')
+const emailReg = /^\w+@[a-zA-Z0-9]{2,10}(?:\.[a-z]{2,4}){1,3}$/
 interface RuleProp {
-  type: 'required' | 'email';
-  message: string
+  type: 'required' | 'email' | 'range';
+  message?: string,
+  min?: {
+    message: string,
+    length: number
+  }
+  max?: {
+    message: string,
+    length: number
+  }
 }
 export type RulesProps = RuleProp[]
 export default defineComponent({
@@ -32,17 +40,33 @@ export default defineComponent({
     const validateEmail = () => {
       if(props.rules) {
         const allPassed = props.rules.some(item => {
+          console.log(item)
           let passed = false
-          iptRef.message = item.message
+          iptRef.message = item.message || ''
           switch (item.type) {
           case 'required':
             passed = iptRef.val.trim() === ''// 为空
-            iptRef.error = true
+            iptRef.error = passed
             break
           case 'email':
             passed = !emailReg.test(iptRef.val)
-            iptRef.error = true
             break
+
+
+          case 'range':
+            console.log(222222)
+            if(item.min) {
+              passed = (iptRef.val.length < item.min?.length)
+              iptRef.message = item.min.message
+            }
+            if(item.max) {
+              console.log('8000')
+              passed = (iptRef.val.length > item.max?.length)
+              iptRef.message = item.max.message
+            }
+            break
+
+          // eslint-disable-next-line no-fallthrough
           default:
             break
           }

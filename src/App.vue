@@ -5,7 +5,7 @@
   <div class="mb-3">
     <label for="exampleInputEmail1" class="form-label">邮箱地址</label>
     <!-- v-model冒号后面不写值，默认就是传递给子组件modelValue -->
-    <validate-input placeholder="大家好才是真的好" v-model:emailVal="emailVal" :rules="emailRules"></validate-input>
+    <validate-input placeholder="请输入邮箱地址" v-model:emailVal="emailVal" :rules="emailRules"></validate-input>
   </div>
   <div class="mb-3">
     <!-- <label for="exampleInputPassword1" class="form-label">密码</label>
@@ -70,7 +70,8 @@ export default defineComponent({
       },
       {
         type: 'email', message: '请输入正确的电子邮箱格式'
-      }
+      },
+      { type: 'range', min: { message: '你的邮箱至少包括六位，不能含有空格', length: 6 }, max: { message: '你的邮箱最多包括十六位，不能含有空格', length: 16 } }
     ])
     return {
       emailVal,
