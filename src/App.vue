@@ -1,11 +1,23 @@
 <template>
   <div class="container">
     <global-header :user="currentUser"></global-header>
-    <column-list :list="testData"></column-list>
+    <form>
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">邮箱地址</label>
+    <input v-model="emailRef.val" @blur="validateEmail" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    <div class="form-text" v-if="emailRef.error">{{emailRef.message}}</div>
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">密码</label>
+    <input type="password" class="form-control" id="exampleInputPassword1">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+    <!-- <column-list :list="testData"></column-list> -->
   </div>
 </template>
 <script lang='ts'>
-import { defineComponent } from 'vue'
+import { defineComponent, reactive } from 'vue'
 import ColumnList, { ColumnProps } from '@/components/ColumnList.vue'
 import GlobalHeader, { UserProps } from '@/components/GlobalHeader.vue'
 const currentUser: UserProps = {
@@ -45,13 +57,30 @@ const testData: ColumnProps[] = [
 ]
 export default defineComponent({
   components: {
-    ColumnList,
+    // ColumnList,
     GlobalHeader,
   },
   setup() {
+    const emailRef = reactive({
+      val: '',
+      error: false,
+      message: ''
+    })
+    const validateEmail = () => {
+      const emailReg = new RegExp('/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(.[a-zA-Z0-9_-]+)+/')
+      if(emailRef.val.trim() === '') {
+        emailRef.error = true
+        emailRef.message = 'email must be required'
+      } else if(!emailReg.test(emailRef.val)) {
+        emailRef.error = true
+        emailRef.message = 'email must valid mesage'
+      }
+    }
     return {
       testData,
-      currentUser
+      currentUser,
+      validateEmail,
+      emailRef
     }
   },
 })

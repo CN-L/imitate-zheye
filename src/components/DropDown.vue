@@ -1,6 +1,5 @@
 <template>
   <div ref="dropDwonRef" class="dropdown">
-    {{isOpen}}
     <a @click="toggleOpen" class="btn my-2 btn-outline-light dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
       {{title}}
     </a>
