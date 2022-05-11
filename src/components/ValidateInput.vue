@@ -1,6 +1,6 @@
 <template>
   <div class="validate-input-container pb-3">
-    <input type="text" @blur="validateEmail" @input="iptChangeTap" :value="iptRef.val" :class="{'is-invalid': iptRef.error}" class="form-control">
+    <input v-bind="$attrs" type="text" @blur="validateEmail" @input="iptChangeTap" :value="iptRef.val" :class="{'is-invalid': iptRef.error}" class="form-control">
     <span class="invalid-feedback" v-if="iptRef.error">{{iptRef.message}}</span>
   </div>
 </template>
@@ -14,6 +14,7 @@ interface RuleProp {
 export type RulesProps = RuleProp[]
 export default defineComponent({
   name: 'ValiDateInput',
+  inheritAttrs: false,
   props: {
     rules: Array as PropType<RulesProps>,
     emailVal: {

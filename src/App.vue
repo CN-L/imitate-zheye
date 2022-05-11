@@ -5,7 +5,7 @@
   <div class="mb-3">
     <label for="exampleInputEmail1" class="form-label">邮箱地址</label>
     <!-- v-model冒号后面不写值，默认就是传递给子组件modelValue -->
-    <validate-input v-model:emailVal="emailVal" :rules="emailRules"></validate-input>
+    <validate-input placeholder="大家好才是真的好" v-model:emailVal="emailVal" :rules="emailRules"></validate-input>
   </div>
   <div class="mb-3">
     <!-- <label for="exampleInputPassword1" class="form-label">密码</label>
@@ -63,7 +63,7 @@ export default defineComponent({
     ValidateInput
   },
   setup() {
-    const emailVal = ref('大家好')
+    const emailVal = ref('')
     const emailRules: RulesProps = reactive([
       {
         type: 'required', message: '电子邮箱不能为空'
