@@ -1,5 +1,6 @@
 <template>
   <div ref="dropDwonRef" class="dropdown">
+    {{isOpen}}
     <a @click="toggleOpen" class="btn my-2 btn-outline-light dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
       {{title}}
     </a>
@@ -9,8 +10,8 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, onUnmounted, ref } from 'vue'
-
+import { defineComponent, ref, watch } from 'vue'
+import useClickOutSide from '@/hooks/useClickOutSide'
 export default defineComponent({
   name: 'DropDown',
   props: {
@@ -20,23 +21,13 @@ export default defineComponent({
     }
   },
   setup() {
-    const isOpen = ref(false)
     const dropDwonRef = ref <null | HTMLElement>(null) // dom元素
-    // 点击关闭dropDown
-    const clickTap = (e: MouseEvent) => {
-      if(dropDwonRef.value) {
-        if(isOpen.value && !dropDwonRef.value.contains(e.target as HTMLElement)) {
-          isOpen.value = false
-        }
+    const isOpen = ref(false)
+    const { isClickOutSide } = useClickOutSide(dropDwonRef)
+    watch(isClickOutSide, () => {
+      if(isClickOutSide && isOpen) {
+        isOpen.value = false
       }
-
-    }
-    // 因为监听器一直存在 干扰后面网页运行 所以需要清楚
-    onMounted(() => {
-      document.addEventListener('click', clickTap)
-    })
-    onUnmounted(() => {
-      document.removeEventListener('click', clickTap)
     })
     // 点击事件
     const toggleOpen = () => {
