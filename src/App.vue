@@ -9,8 +9,8 @@ import { defineComponent } from 'vue'
 import ColumnList, { ColumnProps } from '@/components/ColumnList.vue'
 import GlobalHeader, { UserProps } from '@/components/GlobalHeader.vue'
 const currentUser: UserProps = {
-  isLogin: false,
-  name: '',
+  isLogin: true,
+  name: '李云龙',
 }
 const testData: ColumnProps[] = [
   {
