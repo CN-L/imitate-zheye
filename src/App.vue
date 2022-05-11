@@ -4,11 +4,12 @@
     <form>
   <div class="mb-3">
     <label for="exampleInputEmail1" class="form-label">邮箱地址</label>
-    <validate-input :rules="emailRules"></validate-input>
+    <!-- v-model冒号后面不写值，默认就是传递给子组件modelValue -->
+    <validate-input v-model:emailVal="emailVal" :rules="emailRules"></validate-input>
   </div>
   <div class="mb-3">
-    <label for="exampleInputPassword1" class="form-label">密码</label>
-    <input type="password" class="form-control" id="exampleInputPassword1">
+    <!-- <label for="exampleInputPassword1" class="form-label">密码</label>
+    <input type="password" class="form-control" id="exampleInputPassword1"> -->
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
@@ -16,7 +17,7 @@
   </div>
 </template>
 <script lang='ts'>
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import ColumnList, { ColumnProps } from '@/components/ColumnList.vue'
 import GlobalHeader, { UserProps } from '@/components/GlobalHeader.vue'
 import ValidateInput, { RulesProps } from '@/components/ValidateInput.vue'
@@ -62,6 +63,7 @@ export default defineComponent({
     ValidateInput
   },
   setup() {
+    const emailVal = ref('大家好')
     const emailRules: RulesProps = reactive([
       {
         type: 'required', message: '电子邮箱不能为空'
@@ -71,6 +73,7 @@ export default defineComponent({
       }
     ])
     return {
+      emailVal,
       testData,
       emailRules,
       currentUser,

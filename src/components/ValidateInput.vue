@@ -1,6 +1,6 @@
 <template>
   <div class="validate-input-container pb-3">
-    <input type="text" @blur="validateEmail" v-model="iptRef.val" :class="{'is-invalid': iptRef.error}" class="form-control">
+    <input type="text" @blur="validateEmail" @input="iptChangeTap" :value="iptRef.val" :class="{'is-invalid': iptRef.error}" class="form-control">
     <span class="invalid-feedback" v-if="iptRef.error">{{iptRef.message}}</span>
   </div>
 </template>
@@ -15,11 +15,16 @@ export type RulesProps = RuleProp[]
 export default defineComponent({
   name: 'ValiDateInput',
   props: {
-    rules: Array as PropType<RulesProps>
+    rules: Array as PropType<RulesProps>,
+    emailVal: {
+      // 父组件 v-model 没有指定参数名，则默认是 modelValue
+      type: String,
+      default: '',
+    },
   },
-  setup(props) {
+  setup(props, { emit }) {
     const iptRef = reactive({
-      val: '',
+      val: props.emailVal || '',
       error: false,
       message: ''
     })
@@ -45,8 +50,14 @@ export default defineComponent({
         iptRef.error = allPassed
       }
     }
+    const iptChangeTap = (e: Event) => {
+      const currentVal = (e.target as HTMLInputElement).value
+      iptRef.val = currentVal
+      emit('update:emailVal', currentVal)
+    }
     return {
       iptRef,
+      iptChangeTap,
       validateEmail
     }
   },
