@@ -7,17 +7,15 @@
 <script lang="ts">
 import { defineComponent, reactive, PropType } from 'vue'
 const emailReg = /^\w+@[a-zA-Z0-9]{2,10}(?:\.[a-z]{2,4}){1,3}$/
+type Optional = {
+  message: string,
+  length: number
+}
 interface RuleProp {
   type: 'required' | 'email' | 'range';
   message?: string,
-  min?: {
-    message: string,
-    length: number
-  }
-  max?: {
-    message: string,
-    length: number
-  }
+  min?: Optional
+  max?: Optional
 }
 export type RulesProps = RuleProp[]
 export default defineComponent({
