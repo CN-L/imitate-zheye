@@ -5,7 +5,7 @@
   <div class="mb-3">
     <label for="exampleInputEmail1" class="form-label">邮箱地址</label>
     <!-- v-model冒号后面不写值，默认就是传递给子组件modelValue -->
-    <validate-input placeholder="请输入邮箱地址" v-model:emailVal="emailVal" :rules="emailRules"></validate-input>
+    <validate-input ref="validataNodeDom" placeholder="请输入邮箱地址" v-model:emailVal="emailVal" :rules="emailRules"></validate-input>
   </div>
   <div class="mb-3">
     <label for="exampleInputPassword1" class="form-label">密码</label>
@@ -19,11 +19,11 @@
   </div>
 </template>
 <script lang='ts'>
-import { defineComponent, reactive, ref } from 'vue'
+import { defineComponent, reactive, ref, onMounted } from 'vue'
 import ColumnList, { ColumnProps } from '@/components/ColumnList.vue'
 import GlobalHeader, { UserProps } from '@/components/GlobalHeader.vue'
 import ValidateInput, { RulesProps } from '@/components/ValidateInput.vue'
-import ValidateForm from '@/components/VaildateForm.vue'
+import ValidateForm, { emitter } from '@/components/VaildateForm.vue'
 const currentUser: UserProps = {
   isLogin: true,
   name: '李云龙',
@@ -68,6 +68,7 @@ export default defineComponent({
   },
   setup() {
     const emailVal = ref('')
+    const validataNodeDom = ref<any>(null)
     const passwordVal = ref('')
     const psdWordRules: RulesProps = [
       { type: 'range', min: { message: '你的密码至少包括六位，不能含有空格', length: 6 } }
@@ -86,6 +87,7 @@ export default defineComponent({
     }
     return {
       emailVal,
+      validataNodeDom,
       passwordVal,
       testData,
       psdWordRules,

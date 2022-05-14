@@ -5,7 +5,8 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, PropType } from 'vue'
+import { defineComponent, reactive, PropType, onMounted } from 'vue'
+import { emitter } from '@/components/VaildateForm.vue'
 const emailReg = /^\w+@[a-zA-Z0-9]{2,10}(?:\.[a-z]{2,4}){1,3}$/
 type Optional = {
   message: string,
@@ -38,7 +39,6 @@ export default defineComponent({
     const validateEmail = () => {
       if(props.rules) {
         const allPassed = props.rules.some(item => {
-          console.log(item)
           let passed = false
           iptRef.message = item.message || ''
           switch (item.type) {
@@ -52,13 +52,11 @@ export default defineComponent({
 
 
           case 'range':
-            console.log(222222)
             if(item.min) {
               passed = (iptRef.val.length < item.min?.length)
               iptRef.message = item.min.message
             }
             if(item.max) {
-              console.log('8000')
               passed = (iptRef.val.length > item.max?.length)
               iptRef.message = item.max.message
             }
@@ -71,17 +69,22 @@ export default defineComponent({
           return passed
         })
         iptRef.error = allPassed
+        return allPassed
       }
+      return false
     }
     const iptChangeTap = (e: Event) => {
       const currentVal = (e.target as HTMLInputElement).value
       iptRef.val = currentVal
       emit('update:emailVal', currentVal)
     }
+    onMounted(() => {
+      emitter.emit('form-item-created', validateEmail)
+    })
     return {
       iptRef,
-      iptChangeTap,
-      validateEmail
+      iptChangeTap, // 输入事件 更新父组件
+      validateEmail // 验证表单事件
     }
   },
 })
