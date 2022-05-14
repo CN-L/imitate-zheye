@@ -12,7 +12,10 @@
     <validate-input placeholder="请输入密码" type="password" v-model:emailVal="passwordVal" :rules="psdWordRules"></validate-input>
   </div>
   <template v-slot:submitNode>
-    <span class="btn btn-danger">Submit</span>
+    <span class="btn btn-info">提交</span>
+  </template>
+  <template v-slot:clearNode>
+    <span class="btn btn-secondary">清空</span>
   </template>
 </validate-form>
     <!-- <column-list :list="testData"></column-list> -->

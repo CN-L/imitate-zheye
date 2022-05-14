@@ -78,11 +78,18 @@ export default defineComponent({
       iptRef.val = currentVal
       emit('update:emailVal', currentVal)
     }
+    // 清input
+    const clearValus = () => {
+      iptRef.val = ''
+      emit('update:emailVal', iptRef.val)
+    }
     onMounted(() => {
       emitter.emit('form-item-created', validateEmail)
+      emitter.emit('form-item-clear', clearValus)
     })
     return {
       iptRef,
+      clearValus,
       iptChangeTap, // 输入事件 更新父组件
       validateEmail // 验证表单事件
     }
