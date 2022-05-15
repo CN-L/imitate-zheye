@@ -1,15 +1,17 @@
 <template>
   <form class="validate-from-container">
     <slot name="default"></slot>
-    <div @click.prevent="submitForm" class="submit-area">
-      <slot name="submitNode">
-        <button type="submit" class="btn btn-primary">提交</button>
-      </slot>
-    </div>
-    <div @click.prevent="clearInputs">
+    <div class="row">
+      <div @click.prevent="submitForm" class="submit-area col-2">
+        <slot name="submitNode">
+          <button type="submit" class="btn btn-primary">提交</button>
+        </slot>
+      </div>
+      <div @click.prevent="clearInputs" class="submit-area col-2">
        <slot name="clearNode">
         <button type="submit" class="btn btn-primary">清除</button>
       </slot>
+    </div>
     </div>
   </form>
 </template>

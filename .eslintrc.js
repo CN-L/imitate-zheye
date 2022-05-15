@@ -30,6 +30,7 @@ module.exports = {
   // rules配置文档http://eslint.cn/docs/rules/
   'rules': {
     eqeqeq: ['error', 'always'],
+    'multi-word-component-names': 0,
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     // --以下是Possible Errors JS代码中的逻辑错误相关

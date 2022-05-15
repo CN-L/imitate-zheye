@@ -1,11 +1,11 @@
 <template>
   <nav class="navbar navbar-dark bg-primary justify-content-between mb-4 px-4">
-    <a class="navbar-brand" href="#">
-      者也
-    </a>
+    <router-link :to="{name: 'Home'}" class="navbar-brand" href="#">
+      学者专栏
+    </router-link>
     <ul v-if="!user.isLogin" class="list-inline mb-0">
-      <li class="list-inline-item"><a class="btn btn-outline-light my-2">登陆</a></li>
-      <li class="list-inline-item"><a class="btn btn-outline-light my-2">注册</a></li>
+      <li class="list-inline-item"><router-link :to="{name: 'Login'}" class="btn btn-outline-light my-2">登陆</router-link></li>
+      <li class="list-inline-item"><router-link :to="{name: 'Login'}" class="btn btn-outline-light my-2">注册</router-link></li>
     </ul>
     <ul v-else class="list-inline mb-0">
       <li class="list-inline-item">
