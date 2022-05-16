@@ -37,6 +37,7 @@ export default defineComponent({
       message: ''
     })
     const validateEmail = () => {
+      console.log('222')
       if(props.rules) {
         const allPassed = props.rules.some(item => {
           let passed = false

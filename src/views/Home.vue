@@ -18,8 +18,8 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { testData } from '../testData'
-import ColumnList from '../components/ColumnList.vue'
+import { testData } from '@/testData'
+import ColumnList from '@/components/ColumnList.vue'
 export default defineComponent({
   name: 'HomePage',
   components: {

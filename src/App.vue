@@ -16,6 +16,7 @@
 <script lang='ts'>
 import { defineComponent } from 'vue'
 import GlobalHeader, { UserProps } from '@/components/GlobalHeader.vue'
+
 const currentUser: UserProps = {
   isLogin: false,
   name: '李云龙',

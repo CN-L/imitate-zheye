@@ -9,7 +9,12 @@ const router = createRouter({
     {
       path: '/login',
       name: 'Login',
-      component: () => import('@/views/Login.vue')
+      component: import('@/views/Login.vue')
+    },
+    {
+      path: '/columnDetail/:id',
+      name: 'ColumnDetail',
+      component: import('@/components/ColumnDetail.vue')
     }
   ],
   history: createWebHistory(),

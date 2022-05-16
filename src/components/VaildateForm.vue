@@ -42,14 +42,11 @@ export default defineComponent({
     emitter.on('form-item-created', callback) // 注册监听form表单校验
     // 清空value
     const clearInputFucn = (func: clearType) => {
-      console.log(func, '90')
       clearFuncArr.push(func)
     }
     emitter.on('form-item-clear', clearInputFucn) // 注册监听form清空
     // 清除input输入框
     const clearInputs = () => {
-      console.log('是否执行')
-      console.log(clearFuncArr)
       clearFuncArr.map(func => func())
     }
     onUnmounted(() => {
