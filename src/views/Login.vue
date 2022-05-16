@@ -52,7 +52,7 @@ export default defineComponent({
     })
     const onSubmitTap = (res: boolean) => {
       if(!res) {
-        router.push({ name: 'ColumnDetail', params: { id: 1 } })
+        router.push({ name: 'Home' })
       }
     }
     return {

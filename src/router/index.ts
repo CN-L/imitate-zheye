@@ -12,7 +12,7 @@ const router = createRouter({
       component: import('@/views/Login.vue')
     },
     {
-      path: '/columnDetail/:id',
+      path: '/column/:id',
       name: 'ColumnDetail',
       component: import('@/components/ColumnDetail.vue')
     }
