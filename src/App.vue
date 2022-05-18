@@ -14,18 +14,17 @@
   </footer>
 </template>
 <script lang='ts'>
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
+import { useStore } from 'vuex'
 import GlobalHeader, { UserProps } from '@/components/GlobalHeader.vue'
 
-const currentUser: UserProps = {
-  isLogin: false,
-  name: '李云龙',
-}
 export default defineComponent({
   components: {
     GlobalHeader,
   },
   setup() {
+    const store = useStore()
+    const currentUser = computed(() => store.state.user)
     return {
       currentUser
     }
