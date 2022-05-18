@@ -24,6 +24,11 @@ const store = createStore<GlobalDataProps>({
 
 
   },
+  getters: {
+    biggerColumnLen: state => state.columns.filter(c => c.id > 2).length,
+    getColumnById: state => (id: number) => state.columns.find(todo => todo.id === id),
+    getPostNyCid: state => (cid: number) => state.posts.filter(post => post.id === cid)
+  },
   mutations: {
     loginTap(state) {
       state.user = {
