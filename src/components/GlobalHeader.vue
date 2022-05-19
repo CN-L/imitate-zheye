@@ -10,8 +10,8 @@
     <ul v-else class="list-inline mb-0">
       <li class="list-inline-item">
        <drop-down :title="`你好，${user.name}`">
-        <drop-items disabled>
-          <a href="#" class="dropdown-item">新建文章</a>
+        <drop-items>
+          <router-link :to="{name: 'CreatePage'}" class="dropdown-item">新建文章</router-link>
         </drop-items>
         <drop-items>
            <a href="#" class="dropdown-item">编辑资料</a>

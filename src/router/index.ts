@@ -15,6 +15,11 @@ const router = createRouter({
       path: '/column/:id',
       name: 'ColumnDetail',
       component: import('@/components/ColumnDetail.vue')
+    },
+    {
+      path: '/create',
+      name: 'CreatePage',
+      component: import('@/views/CreatePost.vue')
     }
   ],
   history: createWebHistory(),

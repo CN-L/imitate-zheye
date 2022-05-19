@@ -1,6 +1,8 @@
 <template>
   <div class="validate-input-container pb-3">
-    <input v-bind="$attrs" type="text" @blur="validateEmail" @input="iptChangeTap" :value="iptRef.val" :class="{'is-invalid': iptRef.error}" class="form-control">
+    <input v-if="tag !== 'textarea'" v-bind="$attrs" @blur="validateEmail" @input="iptChangeTap" :value="iptRef.val" :class="{'is-invalid': iptRef.error}" class="form-control">
+    <textarea v-else @blur="validateEmail" :class="{'is-invalid': iptRef.error}" class="form-control" :value="iptRef.val" @input="iptChangeTap" v-bind="$attrs">
+    </textarea>
     <span class="invalid-feedback" v-if="iptRef.error">{{iptRef.message}}</span>
   </div>
 </template>
@@ -19,6 +21,7 @@ interface RuleProp {
   max?: Optional
 }
 export type RulesProps = RuleProp[]
+export type TagType = 'input' | 'textarea'
 export default defineComponent({
   name: 'ValiDateInput',
   inheritAttrs: false,
@@ -29,6 +32,10 @@ export default defineComponent({
       type: String,
       default: '',
     },
+    tag: {
+      type: String as PropType<TagType>,
+      default: 'input'
+    }
   },
   setup(props, { emit }) {
     const iptRef = reactive({
