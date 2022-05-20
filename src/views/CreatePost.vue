@@ -71,3 +71,9 @@ export default defineComponent({
   },
 })
 </script>
+<style>
+.create-post-page {
+  box-sizing: border-box;
+  padding: 16px;
+}
+</style>
