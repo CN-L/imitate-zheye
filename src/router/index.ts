@@ -10,6 +10,9 @@ const router = createRouter({
     {
       path: '/login',
       name: 'Login',
+      meta: {
+        redirectAlreadyLogin: true
+      },
       component: import('@/views/Login.vue')
     },
     {
@@ -20,15 +23,21 @@ const router = createRouter({
     {
       path: '/create',
       name: 'CreatePage',
+      meta: { requiredLogin: true },
       component: import('@/views/CreatePost.vue')
     }
   ],
   history: createWebHistory(),
 })
 router.beforeEach((to, from, next) => {
-  if(to.name !== 'Login' && !store.state.user.isLogin) {
+  console.log(to.meta)
+  if(to.meta.requiredLogin && !store.state.user.isLogin) {
     next({ name: 'Login' })
+  } else if(to.meta.redirectAlreadyLogin && store.state.user.isLogin) {
+    next('/')
+  } else {
+    next()
   }
-  next()
+
 })
 export default router
