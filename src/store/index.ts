@@ -1,7 +1,16 @@
 
 import { createStore } from 'vuex'
-import { PostProps } from '@/testData'
-import { apiGetList } from '@/apis'
+// import { PostProps } from '@/testData'
+import { apiGetList, apiGetColumn, apiFetchPost } from '@/apis'
+export interface PostProps {
+  _id: string,
+  title: string,
+  excerpt?: string,
+  content?: string,
+  image?: ImgProps,
+  createdAt: string,
+  column: string
+}
 interface UserProps {
   isLogin: boolean,
   name?: string,
@@ -42,7 +51,7 @@ const store = createStore<GlobalDataProps>({
   getters: {
     biggerColumnLen: state => state.columns.filter(c => c._id > 2).length,
     getColumnById: state => (id: number) => state.columns.find(todo => todo._id === id),
-    getPostNyCid: state => (cid: number) => state.posts.filter(post => post.columnId === cid)
+    getPostNyCid: state => (cid: string) => state.posts.filter(post => post.column === cid)
   },
   mutations: {
     loginTap(state) {
@@ -53,34 +62,32 @@ const store = createStore<GlobalDataProps>({
       }
     },
     createPost(state, newPost) {
-      console.log(newPost)
       state.posts.push(newPost)
-      console.log(state.posts, '900000')
     },
     setColumns(state, data) {
       state.columns = data.data.list
+    },
+    setColumn(state, data) {
+      state.columns = [data.data]
+    },
+    setPost(state, data) {
+      state.posts = data.data.list
     }
   },
   actions: {
     async fetchColumns(content, form?) {
       const { data } = await apiGetList(form)
       content.commit('setColumns', data)
+    },
+    async fetchColumn({ commit }, id) {
+      const { data } = await apiGetColumn(id)
+      commit('setColumn', data)
+    },
+    async fetchPost({ commit }, id) {
+      const { data } = await apiFetchPost(id)
+      commit('setPost', data)
     }
 
-    /*
-     * fetchColumns({ commit }, data?) {
-     *   return new Promise((resove, reject) => {
-     *     apiGetList(data).then(res => {
-     *       console.log(res, '9099')
-     *       commit('setColumns', res.data)
-     *       resove(res.data)
-     *     })
-     *       .catch(error => {
-     *         reject(error)
-     *       })
-     *   })
-     * }
-     */
   }
 })
 export default store

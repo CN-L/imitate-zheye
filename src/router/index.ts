@@ -35,7 +35,6 @@ const router = createRouter({
   history: createWebHistory(),
 })
 router.beforeEach((to, from, next) => {
-  console.log(to.meta)
   if(to.meta.requiredLogin && !store.state.user.isLogin) {
     next({ name: 'Login' })
   } else if(to.meta.redirectAlreadyLogin && store.state.user.isLogin) {

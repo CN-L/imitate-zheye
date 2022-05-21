@@ -4,3 +4,11 @@ export const apiGetList = (params?: any) => request({
   url: '/columns',
   params,
 })
+export const apiGetColumn = (id: string) => request({
+  method: 'get',
+  url: `/columns/${id}`,
+})
+export const apiFetchPost = (id: any) => request({
+  method: 'get',
+  url: `/columns/${id}/posts`,
+})
