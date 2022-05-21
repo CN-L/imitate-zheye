@@ -9,6 +9,7 @@ import request from '@/assets/request'
 const getAndCommit = async (url: string, mutationsName: string, commit: Commit) => {
   const { data } = await request.get(url)
   commit(mutationsName, data)
+  return data
 
 }
 const postAndCommit = async (url: string, mutationsName: string, commit: Commit, payLoad: any) => {
@@ -86,7 +87,7 @@ const store = createStore<GlobalDataProps>({
     setPost(state, data) {
       state.posts = data.data.list
     },
-    serUser(state, data) {
+    setUser(state, data) {
       state.user = { isLogin: true, ...data.data }
     },
     setLogin(state, data) {
@@ -110,7 +111,7 @@ const store = createStore<GlobalDataProps>({
       getAndCommit(`/columns/${id}/posts`, 'setPost', commit)
     },
     fetchCurrentUser({ commit }) {
-      getAndCommit('/user/current', 'serUser', commit)
+      return getAndCommit('/user/current', 'setUser', commit)
     },
     loginAndFetch({ dispatch }, loginData) {
       return dispatch('login', loginData).then(() => dispatch('fetchCurrentUser'))

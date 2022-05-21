@@ -56,6 +56,7 @@ export default defineComponent({
       }
       if(!res) {
         store.dispatch('loginAndFetch', form).then(res => {
+          console.log(res, '组合1')
           router.push('/')
         })
       }
