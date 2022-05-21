@@ -1,4 +1,5 @@
 import axios from 'axios'
+import store from '@/store'
 const Icode = 'B69F14E65F68760F'
 const request = axios.create({
   baseURL: 'http://apis.imooc.com/api',
@@ -11,7 +12,7 @@ const request = axios.create({
  * 添加请求拦截器
  */
 request.interceptors.request.use(function (config) {
-  console.log(config, '000')
+  store.commit('setLoading', true)
   // 在发送请求之前做些什么
   config.params = {
     ...config.params,
@@ -31,6 +32,7 @@ request.interceptors.request.use(function (config) {
 
 // 添加响应拦截器
 request.interceptors.response.use(function (response) {
+  store.commit('setLoading', false)
   // 对响应数据做点什么
   return response
 }, function (error) {

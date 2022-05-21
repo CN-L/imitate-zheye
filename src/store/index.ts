@@ -9,6 +9,7 @@ import request from '@/assets/request'
 const getAndCommit = async (url: string, mutationsName: string, commit: Commit) => {
   const { data } = await request.get(url)
   commit(mutationsName, data)
+
 }
 export interface PostProps {
   _id: string,
@@ -33,7 +34,8 @@ interface ImgProps {
 export interface GlobalDataProps {
   columns: ColumnProps[],
   posts: PostProps[],
-  user: UserProps
+  user: UserProps,
+  loading: boolean
 }
 export interface ColumnProps {
   _id: number,
@@ -45,6 +47,7 @@ export interface ColumnProps {
 const store = createStore<GlobalDataProps>({
   state() {
     return {
+      loading: false,
       columns: [] as ColumnProps[],
       posts: [] as PostProps[],
       user: {
@@ -68,6 +71,9 @@ const store = createStore<GlobalDataProps>({
         isLogin: true,
         name: '李大壮',
       }
+    },
+    setLoading(state, status) {
+      state.loading = status
     },
     createPost(state, newPost) {
       state.posts.push(newPost)
