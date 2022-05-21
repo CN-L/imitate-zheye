@@ -32,6 +32,7 @@ export default defineComponent({
     const token = computed(() => store.state.token )
     const currentUser = computed(() => store.state.user)
     const isLoading = computed(() => store.state.loading)
+    const error = computed(() => store.state.error)
     onMounted(() => {
       if(!currentUser.value.isLogin && token.value) {
         request.defaults.headers.common['Authorization'] = `Bearer ${token.value}`
@@ -39,6 +40,7 @@ export default defineComponent({
       }
     })
     return {
+      error,
       currentUser,
       isLoading
     }

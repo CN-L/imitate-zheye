@@ -48,8 +48,10 @@ request.interceptors.response.use(function (response) {
   }, 200)
   // 对响应数据做点什么
   return response
-}, function (error) {
-  // 对响应错误做点什么
+}, function (e) {
+  const { error } = e.response.data
+  store.commit('setError', { status: true, message: error })
+  store.commit('setLoading', false)
   return Promise.reject(error)
 })
 export default request

@@ -12,6 +12,10 @@ const getAndCommit = async (url: string, mutationsName: string, commit: Commit) 
   return data
 
 }
+export interface GloablErrorProps {
+  status: boolean,
+  message?: string
+}
 const postAndCommit = async (url: string, mutationsName: string, commit: Commit, payLoad: any) => {
   const { data } = await request.post(url, payLoad)
   commit(mutationsName, data)
@@ -39,6 +43,7 @@ interface ImgProps {
   createdAt?: string
 }
 export interface GlobalDataProps {
+  error: GloablErrorProps,
   token: string,
   columns: ColumnProps[],
   posts: PostProps[],
@@ -55,6 +60,9 @@ export interface ColumnProps {
 const store = createStore<GlobalDataProps>({
   state() {
     return {
+      error: {
+        status: false
+      },
       token: localStorage.getItem('token') || '',
       loading: false,
       columns: [] as ColumnProps[],
@@ -72,6 +80,9 @@ const store = createStore<GlobalDataProps>({
     getPostNyCid: state => (cid: string) => state.posts.filter(post => post.column === cid)
   },
   mutations: {
+    setError(state, data: GloablErrorProps) {
+      state.error = data
+    },
     setLoading(state, status) {
       state.loading = status
     },
