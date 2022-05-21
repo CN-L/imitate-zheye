@@ -11,6 +11,11 @@ const getAndCommit = async (url: string, mutationsName: string, commit: Commit) 
   commit(mutationsName, data)
 
 }
+const postAndCommit = async (url: string, mutationsName: string, commit: Commit, payLoad: any) => {
+  const { data } = await request.post(url, payLoad)
+  commit(mutationsName, data)
+  return data
+}
 export interface PostProps {
   _id: string,
   title: string,
@@ -32,6 +37,7 @@ interface ImgProps {
   createdAt?: string
 }
 export interface GlobalDataProps {
+  token: string,
   columns: ColumnProps[],
   posts: PostProps[],
   user: UserProps,
@@ -47,11 +53,12 @@ export interface ColumnProps {
 const store = createStore<GlobalDataProps>({
   state() {
     return {
+      token: '',
       loading: false,
       columns: [] as ColumnProps[],
       posts: [] as PostProps[],
       user: {
-        isLogin: true,
+        isLogin: false,
         columnId: 1,
         name: '张三',
       }
@@ -65,13 +72,6 @@ const store = createStore<GlobalDataProps>({
     getPostNyCid: state => (cid: string) => state.posts.filter(post => post.column === cid)
   },
   mutations: {
-    loginTap(state) {
-      state.user = {
-        ...state.user,
-        isLogin: true,
-        name: '李大壮',
-      }
-    },
     setLoading(state, status) {
       state.loading = status
     },
@@ -86,9 +86,15 @@ const store = createStore<GlobalDataProps>({
     },
     setPost(state, data) {
       state.posts = data.data.list
+    },
+    setLogin(state, data) {
+      state.token = data.data.token
     }
   },
   actions: {
+    login({ commit }, data) {
+      return postAndCommit('/user/login', 'setLogin', commit, data)
+    },
     fetchColumns({ commit }) {
       getAndCommit('/columns', 'setColumns', commit)
     },

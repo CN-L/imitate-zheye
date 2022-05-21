@@ -5,7 +5,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'Home',
-      redirect: { name: 'HomePage' }
+      redirect: { name: 'HomePage' },
     },
     {
       path: '/home',
@@ -35,7 +35,8 @@ const router = createRouter({
   history: createWebHistory(),
 })
 router.beforeEach((to, from, next) => {
-  if(to.meta.requiredLogin && !store.state.user.isLogin) {
+  if(to.meta.requiredLogin && store.state.user.isLogin === false) {
+    console.log('hi')
     next({ name: 'Login' })
   } else if(to.meta.redirectAlreadyLogin && store.state.user.isLogin) {
     next('/')

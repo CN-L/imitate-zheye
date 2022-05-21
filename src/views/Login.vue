@@ -49,14 +49,15 @@ export default defineComponent({
       },
       { type: 'range', min: { message: '你的邮箱至少包括六位，不能含有空格', length: 6 }, max: { message: '你的邮箱最多包括20位，不能含有空格', length: 20 } }
     ])
-    onMounted(() => {
-      console.log('2233s')
-    })
     const onSubmitTap = (res: boolean) => {
+      const form = {
+        email: emailVal.value,
+        password: passwordVal.value
+      }
       if(!res) {
-
-        router.push({ name: 'Home' })
-        store.commit('loginTap')
+        store.dispatch('login', form).then(res => {
+          router.push('/')
+        })
       }
     }
     return {
