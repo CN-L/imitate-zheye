@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, onUnmounted } from 'vue'
 export default defineComponent({
   name: 'loaderPage',
   props: {
@@ -19,6 +19,12 @@ export default defineComponent({
     background: String
   },
   setup() {
+    const node = document.createElement('div')
+    node.id = 'back'
+    document.body.appendChild(node)
+    onUnmounted(() => {
+      document.body.removeChild(node)
+    })
     return {}
   },
 })

@@ -2,7 +2,7 @@
   <global-header :user="currentUser"></global-header>
   <div v-if="isLoading">加载中</div>
   <router-view></router-view>
-  <loader text="拼命加载中" background="rgba(0, 0, 0, .8)"></loader>
+  <loader v-if="isLoading" text="拼命加载中" background="rgba(0, 0, 0, .8)"></loader>
   <footer class="text-center py-4 text-secondary bg-light mt-6">
     <small>
       <ul class="list-inline mb-0">

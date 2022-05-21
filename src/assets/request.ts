@@ -32,7 +32,9 @@ request.interceptors.request.use(function (config) {
 
 // 添加响应拦截器
 request.interceptors.response.use(function (response) {
-  store.commit('setLoading', false)
+  setTimeout(() => {
+    store.commit('setLoading', false)
+  }, 2000)
   // 对响应数据做点什么
   return response
 }, function (error) {
