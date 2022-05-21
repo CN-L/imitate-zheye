@@ -25,11 +25,12 @@ export interface PostProps {
   createdAt: string,
   column: string
 }
-interface UserProps {
+export interface UserProps {
   isLogin: boolean,
-  name?: string,
-  id?: number,
-  columnId?: number
+  nickName?: string,
+  _id?: number,
+  _column?: number,
+  email?: string
 }
 interface ImgProps {
   _id?: string,
@@ -58,9 +59,7 @@ const store = createStore<GlobalDataProps>({
       columns: [] as ColumnProps[],
       posts: [] as PostProps[],
       user: {
-        isLogin: false,
-        columnId: 1,
-        name: '张三',
+        isLogin: false
       }
     }
 
@@ -87,8 +86,14 @@ const store = createStore<GlobalDataProps>({
     setPost(state, data) {
       state.posts = data.data.list
     },
+    serUser(state, data) {
+      state.user = { isLogin: true, ...data.data }
+    },
     setLogin(state, data) {
-      state.token = data.data.token
+      // 添加token
+      const { token } = data.data
+      state.token = token
+      request.defaults.headers.common['Authorization'] = `Bearer ${token}`
     }
   },
   actions: {
@@ -103,6 +108,12 @@ const store = createStore<GlobalDataProps>({
     },
     fetchPost({ commit }, id) {
       getAndCommit(`/columns/${id}/posts`, 'setPost', commit)
+    },
+    fetchCurrentUser({ commit }) {
+      getAndCommit('/user/current', 'serUser', commit)
+    },
+    loginAndFetch({ dispatch }, loginData) {
+      return dispatch('login', loginData).then(() => dispatch('fetchCurrentUser'))
     }
 
   }

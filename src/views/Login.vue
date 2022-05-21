@@ -20,7 +20,7 @@
   </div>
 </template>
 <script lang='ts'>
-import { defineComponent, reactive, ref, onMounted } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import ValidateInput, { RulesProps } from '@/components/ValidateInput.vue'
@@ -55,7 +55,7 @@ export default defineComponent({
         password: passwordVal.value
       }
       if(!res) {
-        store.dispatch('login', form).then(res => {
+        store.dispatch('loginAndFetch', form).then(res => {
           router.push('/')
         })
       }

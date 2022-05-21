@@ -4,7 +4,9 @@ const Icode = 'B69F14E65F68760F'
 const request = axios.create({
   baseURL: 'http://apis.imooc.com/api',
   timeout: 1000 * 30,
-  headers: {},
+  headers: {
+    ContentType: 'application/json;charset=utf-8'
+  }
 })
 
 /*
@@ -12,6 +14,15 @@ const request = axios.create({
  * 添加请求拦截器
  */
 request.interceptors.request.use(function (config) {
+  //  携带token方法之一 请求拦截器+
+  /*
+   * if(store.state.token) {
+   *   config.headers = {
+   *     ...config.headers,
+   *     Authorization: store.state.token
+   *   }
+   * }
+   */
   store.commit('setLoading', true)
   // 在发送请求之前做些什么
   config.params = {
@@ -34,7 +45,7 @@ request.interceptors.request.use(function (config) {
 request.interceptors.response.use(function (response) {
   setTimeout(() => {
     store.commit('setLoading', false)
-  }, 2000)
+  }, 200)
   // 对响应数据做点什么
   return response
 }, function (error) {
