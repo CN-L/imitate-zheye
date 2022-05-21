@@ -1,5 +1,6 @@
 <template>
   <global-header :user="currentUser"></global-header>
+  <Message type="error" :message="error.message" v-if="error.status"></Message>
   <div v-if="isLoading">加载中</div>
   <router-view></router-view>
   <loader v-if="isLoading" text="拼命加载中" background="rgba(0, 0, 0, .8)"></loader>
@@ -22,9 +23,11 @@ import { GlobalDataProps } from '@/store'
 import GlobalHeader from '@/components/GlobalHeader.vue'
 import loader from '@/components/loader.vue'
 import request from './assets/request'
+import Message from './components/Message.vue'
 export default defineComponent({
   components: {
     GlobalHeader,
+    Message,
     loader,
   },
   setup() {

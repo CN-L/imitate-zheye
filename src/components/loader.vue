@@ -9,7 +9,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onUnmounted } from 'vue'
+import { defineComponent } from 'vue'
+import useDomCreate from '@/hooks/useDomCreate'
 export default defineComponent({
   name: 'loaderPage',
   props: {
@@ -19,12 +20,7 @@ export default defineComponent({
     background: String
   },
   setup() {
-    const node = document.createElement('div')
-    node.id = 'back'
-    document.body.appendChild(node)
-    onUnmounted(() => {
-      document.body.removeChild(node)
-    })
+    useDomCreate('div')
     return {}
   },
 })
