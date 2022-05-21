@@ -1,7 +1,15 @@
 
-import { createStore } from 'vuex'
-// import { PostProps } from '@/testData'
-import { apiGetList, apiGetColumn, apiFetchPost } from '@/apis'
+import { createStore, Commit } from 'vuex'
+
+/*
+ * import { PostProps } from '@/testData'
+ * import { apiGetList, apiGetColumn, apiFetchPost } from '@/apis'
+ */
+import request from '@/assets/request'
+const getAndCommit = async (url: string, mutationsName: string, commit: Commit) => {
+  const { data } = await request.get(url)
+  commit(mutationsName, data)
+}
 export interface PostProps {
   _id: string,
   title: string,
@@ -75,17 +83,14 @@ const store = createStore<GlobalDataProps>({
     }
   },
   actions: {
-    async fetchColumns(content, form?) {
-      const { data } = await apiGetList(form)
-      content.commit('setColumns', data)
+    fetchColumns({ commit }) {
+      getAndCommit('/columns', 'setColumns', commit)
     },
-    async fetchColumn({ commit }, id) {
-      const { data } = await apiGetColumn(id)
-      commit('setColumn', data)
+    fetchColumn({ commit }, id) {
+      getAndCommit(`/columns/${id}`, 'setColumn', commit)
     },
-    async fetchPost({ commit }, id) {
-      const { data } = await apiFetchPost(id)
-      commit('setPost', data)
+    fetchPost({ commit }, id) {
+      getAndCommit(`/columns/${id}/posts`, 'setPost', commit)
     }
 
   }
