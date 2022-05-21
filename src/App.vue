@@ -16,20 +16,28 @@
   </footer>
 </template>
 <script lang='ts'>
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, onMounted } from 'vue'
 import { useStore } from 'vuex'
+import { GlobalDataProps } from '@/store'
 import GlobalHeader from '@/components/GlobalHeader.vue'
 import loader from '@/components/loader.vue'
-
+import request from './assets/request'
 export default defineComponent({
   components: {
     GlobalHeader,
     loader,
   },
   setup() {
-    const store = useStore()
+    const store = useStore<GlobalDataProps>()
+    const token = computed(() => store.state.token )
     const currentUser = computed(() => store.state.user)
     const isLoading = computed(() => store.state.loading)
+    onMounted(() => {
+      if(!currentUser.value.isLogin && token.value) {
+        request.defaults.headers.common['Authorization'] = `Bearer ${token.value}`
+        store.dispatch('fetchCurrentUser')
+      }
+    })
     return {
       currentUser,
       isLoading

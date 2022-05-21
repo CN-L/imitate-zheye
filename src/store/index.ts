@@ -55,7 +55,7 @@ export interface ColumnProps {
 const store = createStore<GlobalDataProps>({
   state() {
     return {
-      token: '',
+      token: localStorage.getItem('token') || '',
       loading: false,
       columns: [] as ColumnProps[],
       posts: [] as PostProps[],
@@ -93,6 +93,7 @@ const store = createStore<GlobalDataProps>({
     setLogin(state, data) {
       // 添加token
       const { token } = data.data
+      localStorage.setItem('token', token)
       state.token = token
       request.defaults.headers.common['Authorization'] = `Bearer ${token}`
     }
@@ -113,6 +114,7 @@ const store = createStore<GlobalDataProps>({
     fetchCurrentUser({ commit }) {
       return getAndCommit('/user/current', 'setUser', commit)
     },
+    // 组合actions
     loginAndFetch({ dispatch }, loginData) {
       return dispatch('login', loginData).then(() => dispatch('fetchCurrentUser'))
     }
