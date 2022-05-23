@@ -1,8 +1,7 @@
 <template>
   <global-header :user="currentUser"></global-header>
-  <div v-if="isLoading">加载中</div>
   <router-view></router-view>
-  <loader v-if="isLoading" text="拼命加载中" background="rgba(0, 0, 0, .8)"></loader>
+  <loader v-if="isLoading" @vnode-unmounted="onMoutedTap" text="拼命加载中" background="rgba(0, 0, 0, .8)"></loader>
   <footer class="text-center py-4 text-secondary bg-light mt-6">
     <small>
       <ul class="list-inline mb-0">
@@ -34,6 +33,10 @@ export default defineComponent({
     const currentUser = computed(() => store.state.user)
     const isLoading = computed(() => store.state.loading)
     const error = computed(() => store.state.error)
+    // 子组件生命周期监测
+    const onMoutedTap = ((res: any) => {
+      console.log(res, '监听子组件某个生命周期')
+    })
     watch(() => error.value.status, () => {
       const { status, message } = error.value
       if(status && message) {
@@ -49,6 +52,7 @@ export default defineComponent({
     return {
       token,
       error,
+      onMoutedTap,
       currentUser,
       isLoading
     }

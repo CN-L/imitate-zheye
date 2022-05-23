@@ -39,3 +39,26 @@ cont vNode = {
 
 - 更新效率高，计算需要的最小化操作，并完成更新
 
+### 关于监听子组件的生命周期
+
+vue3.0中
+
+```vue
+ <!-- 在 Vue 3 中，事件名附带的是 vnode- 前缀： -->
+<template>
+  <child-component @vnode-updated="onUpdated">
+</template>
+<!-- 或者在驼峰命名法的情况下附带前缀 vnode： -->
+<template>
+  <child-component @vnodeUpdated="onUpdated">
+</template>
+```
+
+vue2.0中
+
+```vue
+<template>
+  <child-component @hook:updated="onUpdated">
+</template>
+```
+
