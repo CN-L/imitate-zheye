@@ -1,10 +1,5 @@
 
 import { createStore, Commit } from 'vuex'
-
-/*
- * import { PostProps } from '@/testData'
- * import { apiGetList, apiGetColumn, apiFetchPost } from '@/apis'
- */
 import request from '@/assets/request'
 const getAndCommit = async (url: string, mutationsName: string, commit: Commit) => {
   const { data } = await request.get(url)

@@ -1,17 +1,22 @@
-import { createApp, createVNode } from 'vue'
+import { h, render } from 'vue'
 import Message from '@/components/Message.vue'
 export type MesaageType = 'success' | 'error' | 'default'
-const createMessage = (message: string, type: MesaageType, time = 2000) => {
-  const messageInstance = createApp(Message, {
+const createMessage = (message: string, type: MesaageType, time?: number) => {
+  const messageVnode = h(Message, {
     message,
     type
   })
-  const mountNode = document.createElement('div') // 创建一个dom
-  document.body.appendChild(mountNode) // 添加到token
-  messageInstance.mount(mountNode) // 将应用的实例 挂在到mountnode
-  setTimeout(() => {
-    messageInstance.unmount()
+  const mountNode = document.createElement('div') // 创建一个真实dom
+  document.body.appendChild(mountNode)
+  render(messageVnode, mountNode)
+  const destory = () => {
+    render(null, mountNode)
     document.body.removeChild(mountNode)
-  }, time)
+  }
+  if(time) {
+    setTimeout(() => {
+      destory()
+    }, time)
+  }
 }
 export default createMessage

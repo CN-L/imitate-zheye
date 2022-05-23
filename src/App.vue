@@ -1,6 +1,6 @@
 <template>
   <global-header :user="currentUser"></global-header>
-  <Vnode1 msg="大家好才是真的好"></Vnode1>
+  <Vnode1 :msg="token"></Vnode1>
   <router-view></router-view>
   <loader v-if="isLoading" @vnode-unmounted="onMoutedTap" text="拼命加载中" background="rgba(0, 0, 0, .8)"></loader>
   <footer class="text-center py-4 text-secondary bg-light mt-6">
@@ -43,7 +43,7 @@ export default defineComponent({
     watch(() => error.value.status, () => {
       const { status, message } = error.value
       if(status && message) {
-        createMessage(message, 'error')
+        createMessage(message, 'error', 2000)
       }
     })
     onMounted(() => {
