@@ -1,6 +1,5 @@
 <template>
   <global-header :user="currentUser"></global-header>
-  <Message type="error" :message="error.message" v-if="error.status"></Message>
   <div v-if="isLoading">加载中</div>
   <router-view></router-view>
   <loader v-if="isLoading" text="拼命加载中" background="rgba(0, 0, 0, .8)"></loader>
@@ -17,17 +16,16 @@
   </footer>
 </template>
 <script lang='ts'>
-import { computed, defineComponent, onMounted } from 'vue'
+import { computed, defineComponent, onMounted, watch } from 'vue'
 import { useStore } from 'vuex'
 import { GlobalDataProps } from '@/store'
 import GlobalHeader from '@/components/GlobalHeader.vue'
 import loader from '@/components/loader.vue'
 import request from './assets/request'
-import Message from './components/Message.vue'
+import createMessage from '@/hooks/createMessage'
 export default defineComponent({
   components: {
     GlobalHeader,
-    Message,
     loader,
   },
   setup() {
@@ -36,6 +34,12 @@ export default defineComponent({
     const currentUser = computed(() => store.state.user)
     const isLoading = computed(() => store.state.loading)
     const error = computed(() => store.state.error)
+    watch(() => error.value.status, () => {
+      const { status, message } = error.value
+      if(status && message) {
+        createMessage(message, 'error')
+      }
+    })
     onMounted(() => {
       if(!currentUser.value.isLogin && token.value) {
         request.defaults.headers.common['Authorization'] = `Bearer ${token.value}`
@@ -43,6 +47,7 @@ export default defineComponent({
       }
     })
     return {
+      token,
       error,
       currentUser,
       isLoading

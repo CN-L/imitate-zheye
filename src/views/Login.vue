@@ -23,6 +23,7 @@
 import { defineComponent, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import createMessage from '@/hooks/createMessage'
 import ValidateInput, { RulesProps } from '@/components/ValidateInput.vue'
 import ValidateForm from '@/components/VaildateForm.vue'
 export default defineComponent({
@@ -56,7 +57,7 @@ export default defineComponent({
       }
       if(!res) {
         store.dispatch('loginAndFetch', form).then(res => {
-          console.log(res, '组合1')
+          createMessage('成功', 'success')
           router.push('/')
         })
       }

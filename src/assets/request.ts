@@ -24,6 +24,9 @@ request.interceptors.request.use(function (config) {
    * }
    */
   store.commit('setLoading', true)
+  store.commit('setError', {
+    status: false, error: ''
+  })
   // 在发送请求之前做些什么
   config.params = {
     ...config.params,

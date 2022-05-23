@@ -1,13 +1,9 @@
 <template>
   <teleport to="#message">
-    <div class="alert message-info fixed-top w-50 mx-auto d-flex justify-content-between mt-2"
-    :class="classObject" v-if="isShow"
-    >
-      <span>{{message}}</span>
-      <button type="button" @click.prevent="hideTap" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
-    </div>
+    <div :class="classObject"  v-if="isShow" class="alert alert-dismissible fixed-top fade show" role="alert">
+      {{message}}
+  <button type="button" @click.prevent="hideTap" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
   </teleport>
 </template>
 <script lang="ts">
@@ -25,14 +21,14 @@ export default defineComponent({
   },
   emits: ['close-messsage'],
   setup(props, context) {
-    useDomCreate('message')
+    useDomCreate('message') // 创建dom节点
     const isShow = ref(true)
     const hideTap = () => {
       isShow.value = false
       context.emit('close-messsage', isShow.value)
     }
     const classObject = {
-      'alert-scueess': props.type === 'success',
+      'alert-success': props.type === 'success',
       'alert-danger': props.type === 'error',
       'alert-primary': props.type === 'default'
     }
