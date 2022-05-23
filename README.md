@@ -1,16 +1,41 @@
 # Vue 3 + TypeScript + Vite
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## render Fuction 和 vnode
 
-## Recommended IDE Setup
+- ### 认知vitrulalDom
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+定义： 一种虚拟的，<u>保存在内存中的结构数据，用来代表ui的表现</u>，和真实dom字节保持同步。VitrulalDom（虚拟dom）是由一系列的Vnode组成的
 
-## Type Support For `.vue` Imports in TS
+```typescript
+// 模拟一个简单的Vnode
+cont vNode = {
+  type: 'div',
+  props: {
+    id: 'hello'
+  },
+  children: [
+    /* more vnodes */
+  ]
+}
+```
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
+- ### Render Pipeline（即template编译）
 
-1. Run `Extensions: Show Built-in Extensions` from VS Code's command palette, look for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default, Take Over mode will enable itself if the default TypeScript extension is disabled.
-2. Reload the VS Code window by running `Developer: Reload Window` from the command palette.
+1. Compile, vue组件的Template会被编译为render function(特殊的function，即一个返回Virtual Dom树的函数)
 
-You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
+2. Mount， 执行render function， 遍历虚拟dom树。生成真正的dom节点
+
+3. Path， 当组件中响应式对象（依赖）发生变化。执行更新操作。生成新的虚拟Dom节点数，vue内部会遍历新的虚拟节点树，和旧的做对比，执行必要的更新
+
+### 对比template和render function的写法区别：
+
+- template比render function更接近html，更好懂，更容易修改
+- template更容易做静态优化，Vue的complier在编译过程中可做很多自动的性能优化
+- 实践中，template适应大多数的情况，只有在极少数情况下，还需要学习使用render function。因为它本身是javascript语法，要灵活多变。vue提供对应的api乐意不使用template，而是直接使用render funcition
+
+### 虚拟Dom的有点
+
+- 使用更方便的方式，供开发者操作ui的状态和结构，不必跟真实dom节点打交道
+
+- 更新效率高，计算需要的最小化操作，并完成更新
+
