@@ -21,23 +21,35 @@ cont vNode = {
 
 - ### Render Pipeline（即template编译）
 
+```vue
 1. Compile, vue组件的Template会被编译为render function(特殊的function，即一个返回Virtual Dom树的函数)
 
 2. Mount， 执行render function， 遍历虚拟dom树。生成真正的dom节点
 
 3. Path， 当组件中响应式对象（依赖）发生变化。执行更新操作。生成新的虚拟Dom节点数，vue内部会遍历新的虚拟节点树，和旧的做对比，执行必要的更新
+```
+
+
 
 ### 对比template和render function的写法区别：
 
-- template比render function更接近html，更好懂，更容易修改
-- template更容易做静态优化，Vue的complier在编译过程中可做很多自动的性能优化
-- 实践中，template适应大多数的情况，只有在极少数情况下，还需要学习使用render function。因为它本身是javascript语法，要灵活多变。vue提供对应的api乐意不使用template，而是直接使用render funcition
+```vue
+1. template比render function更接近html，更好懂，更容易修改
+2. template更容易做静态优化，Vue的complier在编译过程中可做很多自动的性能优化
+3. 实践中，template适应大多数的情况，只有在极少数情况下，还需要学习使用render function。因为它本身是javascript语法，要灵活多变。vue提供对应的api乐意不使用template，而是直接使用render funcition
+```
 
-### 虚拟Dom的有点
 
-- 使用更方便的方式，供开发者操作ui的状态和结构，不必跟真实dom节点打交道
 
-- 更新效率高，计算需要的最小化操作，并完成更新
+### 虚拟Dom的优点
+
+```html
+使用更方便的方式，供开发者操作ui的状态和结构，不必跟真实dom节点打交道
+
+更新效率高，计算需要的最小化操作，并完成更新
+```
+
+
 
 ### 关于监听子组件的生命周期
 
@@ -60,5 +72,22 @@ vue2.0中
 <template>
   <child-component @hook:updated="onUpdated">
 </template>
+```
+
+创建虚拟dom: h函数
+
+```typescript
+h('h1', props.msg + count.value), h('div', count.value)
+<!--也可以返回个数组-->
+return () => [h('h1', props.msg + count.value), h('div', count.value)]
+```
+
+jsx是h函数的语法糖，可以将这种类似于html写法转为h函数
+
+```jsx
+// 创建vnode
+const vnode = <div>hello</div>
+//使用变量
+const vnode = <div id={dynamicId}>hello, {username}</div>
 ```
 

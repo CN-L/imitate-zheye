@@ -1,5 +1,6 @@
 <template>
   <global-header :user="currentUser"></global-header>
+  <Vnode1 msg="大家好才是真的好"></Vnode1>
   <router-view></router-view>
   <loader v-if="isLoading" @vnode-unmounted="onMoutedTap" text="拼命加载中" background="rgba(0, 0, 0, .8)"></loader>
   <footer class="text-center py-4 text-secondary bg-light mt-6">
@@ -22,8 +23,10 @@ import GlobalHeader from '@/components/GlobalHeader.vue'
 import loader from '@/components/loader.vue'
 import request from './assets/request'
 import createMessage from '@/hooks/createMessage'
+import Vnode1 from './components/Vnode'
 export default defineComponent({
   components: {
+    Vnode1,
     GlobalHeader,
     loader,
   },
