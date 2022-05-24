@@ -91,3 +91,16 @@ const vnode = <div>hello</div>
 const vnode = <div id={dynamicId}>hello, {username}</div>
 ```
 
+关于render函数：常见于虚拟dom渲染
+
+```tsx
+<!-- 如果想使用mout进行挂载 那是createdApp创建出来的虚拟dom才能行-->
+render(messageVnode, mountNode) <!--messageVnode 挂在到moutNode-->
+```
+
+关于退出登陆的功能
+
+```html
+目中使用isLogin记录当前状态，一旦刷新为false，但app.vue中调用了当前用户信息的请求 处理请求时重新设为了true， 退出登陆应该是清本地存储,提交mutations手动改isLogin状态和token
+```
+
