@@ -5,7 +5,7 @@ const request = axios.create({
   baseURL: 'http://apis.imooc.com/api',
   timeout: 1000 * 30,
   headers: {
-    ContentType: 'application/json;charset=utf-8'
+    'Content-ype': 'application/json;charset=utf-8'
   }
 })
 
@@ -14,6 +14,7 @@ const request = axios.create({
  * 添加请求拦截器
  */
 request.interceptors.request.use(function (config) {
+  console.log(config.headers, '890')
   //  携带token方法之一 请求拦截器+
   /*
    * if(store.state.token) {
