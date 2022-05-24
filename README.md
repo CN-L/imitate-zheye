@@ -104,3 +104,15 @@ render(messageVnode, mountNode) <!--messageVnode 挂在到moutNode-->
 目中使用isLogin记录当前状态，一旦刷新为false，但app.vue中调用了当前用户信息的请求 处理请求时重新设为了true， 退出登陆应该是清本地存储,提交mutations手动改isLogin状态和token
 ```
 
+关于图片上传组件
+
+```vue
+<!-- 首先一个button触发事件，点击事件触发隐藏的input的click事件即可 -->
+const fileInput = ref<HTMLInputElement | null>(null)
+const triggerUpload = () => {
+   if(fileInput.value) {
+      fileInput.value.click()
+    }
+}
+```
+
