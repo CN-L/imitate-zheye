@@ -1,6 +1,5 @@
 
 import { defineComponent, h, ref } from 'vue'
-
 export default defineComponent({
   name: 'VNode',
   props: {
@@ -10,7 +9,6 @@ export default defineComponent({
       required: true
     }
   },
-  render: () => h('div', { id: '90' }),
   setup(props) {
     const count = ref(1)
     return () => (

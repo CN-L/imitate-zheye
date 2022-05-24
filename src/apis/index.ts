@@ -12,3 +12,8 @@ export const apiFetchPost = (id: number) => request({
   method: 'get',
   url: `/columns/${id}/posts`,
 })
+export const apiRegister = (data: any) => request({
+  method: 'post',
+  url: '/users',
+  data
+})

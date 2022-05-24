@@ -5,7 +5,7 @@
     </router-link>
     <ul v-if="!user.isLogin" class="list-inline mb-0">
       <li class="list-inline-item"><router-link :to="{name: 'Login'}" class="btn btn-outline-light my-2">登陆</router-link></li>
-      <li class="list-inline-item"><router-link :to="{name: 'Login'}" class="btn btn-outline-light my-2">注册</router-link></li>
+      <li class="list-inline-item"><router-link :to="{name: 'Register'}" class="btn btn-outline-light my-2">注册</router-link></li>
     </ul>
     <ul v-else class="list-inline mb-0">
       <li class="list-inline-item">
@@ -17,7 +17,7 @@
            <a href="#" class="dropdown-item">编辑资料</a>
         </drop-items>
         <drop-items>
-          <a href="#" class="dropdown-item">退出登录</a>
+          <a href="#" @click.prevent="jumpTo" class="dropdown-item">退出登录</a>
         </drop-items>
        </drop-down>
       </li>
@@ -28,7 +28,8 @@
 import { defineComponent, PropType } from 'vue'
 import DropDown from '@/components/DropDown.vue'
 import DropItems from '@/components/DropItem.vue'
-import { UserProps } from '@/store'
+import store, { UserProps } from '@/store'
+import { useRouter } from 'vue-router'
 export default defineComponent({
   name: 'GlobalHeader',
   components: {
@@ -42,7 +43,14 @@ export default defineComponent({
     },
   },
   setup() {
-    return{}
+    const router = useRouter()
+    const jumpTo = () => {
+      store.commit('setLoginOut')
+      router.push({ path: '/login' })
+    }
+    return{
+      jumpTo
+    }
   },
 })
 </script>

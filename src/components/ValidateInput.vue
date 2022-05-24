@@ -9,19 +9,7 @@
 <script lang="ts">
 import { defineComponent, reactive, PropType, onMounted } from 'vue'
 import { emitter } from '@/components/VaildateForm.vue'
-const emailReg = /^\w+@[a-zA-Z0-9]{2,10}(?:\.[a-z]{2,4}){1,3}$/
-type Optional = {
-  message: string,
-  length: number
-}
-interface RuleProp {
-  type: 'required' | 'email' | 'range';
-  message?: string,
-  min?: Optional
-  max?: Optional
-}
-export type RulesProps = RuleProp[]
-export type TagType = 'input' | 'textarea'
+import { RulesProps, TagType } from '@/assets/rules'
 export default defineComponent({
   name: 'ValiDateInput',
   inheritAttrs: false,
@@ -38,13 +26,13 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
+    const emailReg = /^\w+@[a-zA-Z0-9]{2,10}(?:\.[a-z]{2,4}){1,3}$/
     const iptRef = reactive({
       val: props.emailVal || '',
       error: false,
       message: ''
     })
     const validateEmail = () => {
-      console.log('222')
       if(props.rules) {
         const allPassed = props.rules.some(item => {
           let passed = false
@@ -57,8 +45,9 @@ export default defineComponent({
           case 'email':
             passed = !emailReg.test(iptRef.val)
             break
-
-
+          case 'custom':
+            passed = item.vaildator ? item.vaildator() : false
+            break
           case 'range':
             if(item.min) {
               passed = (iptRef.val.length < item.min?.length)

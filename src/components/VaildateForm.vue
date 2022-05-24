@@ -2,7 +2,7 @@
   <form class="validate-from-container">
     <slot name="default"></slot>
     <div class="row">
-      <div @click.prevent="submitForm" class="submit-area col-2">
+      <div @click.prevent="submitForm" class="submit-area col-4">
         <slot name="submitNode">
           <button type="submit" class="btn btn-primary">提交</button>
         </slot>

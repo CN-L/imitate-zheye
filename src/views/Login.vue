@@ -24,8 +24,9 @@ import { defineComponent, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import createMessage from '@/hooks/createMessage'
-import ValidateInput, { RulesProps } from '@/components/ValidateInput.vue'
+import ValidateInput from '@/components/ValidateInput.vue'
 import ValidateForm from '@/components/VaildateForm.vue'
+import rulesForm, { RulesProps, TagType } from '@/assets/rules'
 export default defineComponent({
   name: 'LoginPage',
   components: {
@@ -38,18 +39,8 @@ export default defineComponent({
     const router = useRouter()
     const validataNodeDom = ref<any>(null)
     const passwordVal = ref('')
-    const psdWordRules: RulesProps = [
-      { type: 'range', min: { message: '你的密码至少包括六位，不能含有空格', length: 6 } }
-    ]
-    const emailRules: RulesProps = reactive([
-      {
-        type: 'required', message: '电子邮箱不能为空'
-      },
-      {
-        type: 'email', message: '请输入正确的电子邮箱格式'
-      },
-      { type: 'range', min: { message: '你的邮箱至少包括六位，不能含有空格', length: 6 }, max: { message: '你的邮箱最多包括20位，不能含有空格', length: 20 } }
-    ])
+    const psdWordRules: RulesProps = rulesForm.psdWordRules
+    const emailRules: RulesProps = rulesForm.emailRules
     const onSubmitTap = (res: boolean) => {
       const form = {
         email: emailVal.value,
@@ -57,7 +48,7 @@ export default defineComponent({
       }
       if(!res) {
         store.dispatch('loginAndFetch', form).then(res => {
-          createMessage('成功', 'success')
+          createMessage('成功', 'success', 2000)
           router.push('/')
         })
       }

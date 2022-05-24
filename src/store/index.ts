@@ -102,6 +102,12 @@ const store = createStore<GlobalDataProps>({
       localStorage.setItem('token', token)
       state.token = token
       request.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    },
+    // 退出登陆
+    setLoginOut(state) {
+      localStorage.clear()
+      state.token = ''
+      state.user.isLogin = false
     }
   },
   actions: {

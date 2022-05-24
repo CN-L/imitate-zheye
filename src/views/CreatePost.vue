@@ -23,7 +23,8 @@ import { useStore } from 'vuex'
 import VaildateForm from '@/components/VaildateForm.vue'
 import { GlobalDataProps } from '@/store'
 import { PostProps } from '@/testData'
-import ValidateInput, { RulesProps } from '@/components/ValidateInput.vue'
+import ValidateInput from '@/components/ValidateInput.vue'
+import { RulesProps } from '@/assets/rules'
 export default defineComponent({
   components: {
     VaildateForm,

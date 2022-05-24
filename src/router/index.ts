@@ -10,17 +10,17 @@ const router = createRouter({
     {
       path: '/home',
       name: 'HomePage',
+      meta: { login: true },
       component: () => import('@/views/Home.vue')
     },
     {
       path: '/login',
       name: 'Login',
-      meta: {
-        redirectAlreadyLogin: true
-      },
+      meta: {},
       component: import('@/views/Login.vue')
     },
     {
+      meta: { login: true },
       path: '/column/:id',
       name: 'ColumnDetail',
       component: import('@/components/ColumnDetail.vue')
@@ -28,17 +28,23 @@ const router = createRouter({
     {
       path: '/create',
       name: 'CreatePage',
-      meta: { requiredLogin: true },
+      meta: { login: true },
       component: import('@/views/CreatePost.vue')
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      component: import('@/views/Signup.vue')
     }
   ],
   history: createWebHistory(),
 })
 router.beforeEach((to, from, next) => {
-  if(to.meta.requiredLogin && store.state.user.isLogin === false) {
+  console.log(store.state.user.isLogin, '登录状态')
+  if(to.meta.login && store.state.token) {
+    next()
+  } else if(to.meta.login && !store.state.token) {
     next({ name: 'Login' })
-  } else if(to.meta.redirectAlreadyLogin && store.state.user.isLogin) {
-    next('/')
   } else {
     next()
   }
