@@ -46,12 +46,6 @@ export default defineComponent({
         createMessage(message, 'error', 2000)
       }
     })
-    onMounted(() => {
-      if(!currentUser.value.isLogin && token.value) {
-        request.defaults.headers.common['Authorization'] = `Bearer ${token.value}`
-        store.dispatch('fetchCurrentUser')
-      }
-    })
     return {
       token,
       error,

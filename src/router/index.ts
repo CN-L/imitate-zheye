@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import request from '@/assets/request'
 import store from '@/store'
 const router = createRouter({
   routes: [
@@ -10,17 +11,19 @@ const router = createRouter({
     {
       path: '/home',
       name: 'HomePage',
-      meta: { login: true },
+      meta: { loginAuto: true },
       component: () => import('@/views/Home.vue')
     },
     {
       path: '/login',
       name: 'Login',
-      meta: {},
+      meta: {
+        isLoginPage: true
+      },
       component: import('@/views/Login.vue')
     },
     {
-      meta: { login: true },
+      meta: { loginAuto: true },
       path: '/column/:id',
       name: 'ColumnDetail',
       component: import('@/components/ColumnDetail.vue')
@@ -28,7 +31,7 @@ const router = createRouter({
     {
       path: '/create',
       name: 'CreatePage',
-      meta: { login: true },
+      meta: { loginAuto: true },
       component: import('@/views/CreatePost.vue')
     },
     {
@@ -40,13 +43,30 @@ const router = createRouter({
   history: createWebHistory(),
 })
 router.beforeEach((to, from, next) => {
-  if(to.meta.login && store.state.token) {
-    next()
-  } else if(to.meta.login && !store.state.token) {
-    next({ name: 'Login' })
+  const { token, user } = store.state
+  const { loginAuto, isLoginPage } = to.meta
+  if(!user.isLogin) {
+    if(token) {
+      request.defaults.headers.common['Authorization'] = `Bearer ${token}`
+      store.dispatch('fetchCurrentUser').then(() => {
+        if(isLoginPage) {
+          next('/')
+        } else {
+          next()
+        }
+      })
+        .catch(() => {
+          next({ name: 'Login' })
+        })
+    } else if(loginAuto) {
+      next({ name: 'Login' })
+    } else {
+      next()
+    }
+  } else if(isLoginPage) {
+    next('/')
   } else {
     next()
   }
-
 })
 export default router
