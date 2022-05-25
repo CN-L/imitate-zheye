@@ -1,6 +1,6 @@
 <template>
   <div class="file-upload">
-    <div class="file-upload-container" @click.prevent="triggerUpload">
+    <div v-bind="$attrs" class="file-upload-container" @click.prevent="triggerUpload">
      <slot name="loading" v-if="filesStatus === 'loading'">
        <button class="btn btn-primary">正在上传</button>
      </slot>
@@ -21,6 +21,7 @@ type UploaderStatus = 'ready' | 'loading' | 'success' | 'error'
 type CheckFunction = (file: File) => boolean
 export default defineComponent({
   name: 'UploaderView',
+  inheritAttrs: false,
   props: {
     action: {
       type: String,

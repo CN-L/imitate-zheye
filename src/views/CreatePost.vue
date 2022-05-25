@@ -1,6 +1,20 @@
 <template>
   <div class="create-post-page">
     <h4>新建文章</h4>
+    <uploader class="d-flex text-secondary w-100 my-4 bg-light align-items-center justify-content-center" :before-upload="beforeUpload" action="/upload" @file-uploaded="uploadedTap">
+      <h2>点击上传头图</h2>
+      <template v-slot:loading>
+        <div class="d-flex">
+            <div class="spinner-border text-secondary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <h2>正在上传</h2>
+        </div>
+      </template>
+      <template #success="{uploadedDate}">
+        <img :src="uploadedDate.data.url" alt="">
+      </template>
+    </uploader>
     <vaildate-form @form-submit="onFormSubmit">
       <div class="mb-3">
         <label class="form-label">文章标题：</label>
@@ -20,13 +34,14 @@
 import { defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import Uploader from '@/components/Uploader.vue'
 import VaildateForm from '@/components/VaildateForm.vue'
 import { GlobalDataProps } from '@/store'
-import { PostProps } from '@/testData'
 import ValidateInput from '@/components/ValidateInput.vue'
 import { RulesProps } from '@/assets/rules'
 export default defineComponent({
   components: {
+    Uploader,
     VaildateForm,
     ValidateInput
   },
@@ -45,6 +60,13 @@ export default defineComponent({
       }
     ]
     const contentVal = ref('')
+    const beforeUpload = (file: File) => {
+      const type = file.type.split('/')
+      return type.includes('image')
+    }
+    const uploadedTap = (res: any) => {
+      console.log(res)
+    }
     const onFormSubmit = (result: boolean) => {
 
       /*
@@ -66,6 +88,8 @@ export default defineComponent({
        */
     }
     return {
+      uploadedTap,
+      beforeUpload,
       titleRules,
       contentRules,
       titleVal,
@@ -80,4 +104,14 @@ export default defineComponent({
   box-sizing: border-box;
   padding: 16px;
 }
+.create-post-page .file-upload-container {
+  height: 200px;
+  cursor: pointer;
+}
+.create-post-page .file-upload-container img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 </style>

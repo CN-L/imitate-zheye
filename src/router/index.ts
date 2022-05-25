@@ -69,7 +69,6 @@ router.beforeEach((to, from, next) => {
   } else if(isLoginPage) {
     next('/')
   } else {
-    store.commit('setLoginOut')
     next()
   }
 })
