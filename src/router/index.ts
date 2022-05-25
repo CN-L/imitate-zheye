@@ -40,7 +40,6 @@ const router = createRouter({
   history: createWebHistory(),
 })
 router.beforeEach((to, from, next) => {
-  console.log(store.state.user.isLogin, '登录状态')
   if(to.meta.login && store.state.token) {
     next()
   } else if(to.meta.login && !store.state.token) {

@@ -115,5 +115,6 @@ const triggerUpload = () => {
     }
 }
 <!--上传状态是由axios的几个方法实现的 catch then finally-->
+<!--  上传前的检查通过props传过来的function -->
 ```
 

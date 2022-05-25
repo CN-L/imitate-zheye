@@ -16,6 +16,11 @@ const postAndCommit = async (url: string, mutationsName: string, commit: Commit,
   commit(mutationsName, data)
   return data
 }
+export interface ResponType<T = never> {
+  code: number,
+  msg: string,
+  data: T
+}
 export interface PostProps {
   _id: string,
   title: string,
@@ -32,7 +37,7 @@ export interface UserProps {
   _column?: number,
   email?: string
 }
-interface ImgProps {
+export interface ImgProps {
   _id?: string,
   url?: string,
   createdAt?: string

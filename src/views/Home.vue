@@ -1,6 +1,10 @@
 <template>
     <div class="home-page">
-    <uploader :before-upload="beforeUpload" action="/upload"></uploader>
+    <uploader :before-upload="beforeUpload" action="/upload" @file-uploaded="uploadedTap" @file-uploaded-error="uploadedTapError">
+    <template #success="{ uploadedDate }">
+     <img :src="uploadedDate.data.url" alt="">
+    </template>
+    </uploader>
     <section class="py-5 text-center container">
       <div class="row py-lg-5">
         <div class="col-lg-6 col-md-8 mx-auto">
@@ -8,7 +12,6 @@
           <h2 class="font-weight-light">随心写作，自由表达</h2>
           <p>
             <router-link class="btn btn-primary my-2" :to="{name: 'CreatePage'}">开始写文章</router-link>
-            <!-- <a href="#" @click.prevent="addNewPage" class="btn btn-primary my-2">开始写文章</a> -->
           </p>
         </div>
       </div>
@@ -21,7 +24,7 @@
 <script lang="ts">
 import { defineComponent, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
-import { GlobalDataProps } from '@/store'
+import { GlobalDataProps, ResponType, ImgProps } from '@/store'
 import ColumnList from '@/components/ColumnList.vue'
 import Uploader from '@/components/Uploader.vue'
 import createMessage from '@/hooks/createMessage'
@@ -45,11 +48,19 @@ export default defineComponent({
     onMounted(() => {
       store.dispatch('fetchColumns')
     })
+    const uploadedTap = (data: ResponType<ImgProps>) => {
+      createMessage(`${data.data._id}`, 'success', 2000)
+    }
+    const uploadedTapError = (data: string) => {
+      createMessage(data, 'error')
+    }
     const list = computed(() => store.state.columns)
     const biggerColumnLen = computed(() => store.getters.biggerColumnLen)
     return {
       list,
-      beforeUpload,
+      beforeUpload, // 上传前类型检测
+      uploadedTap, // 上传完成
+      uploadedTapError, // 上传失败
       biggerColumnLen
     }
   }
