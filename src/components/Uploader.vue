@@ -9,9 +9,10 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, PropType, ref } from 'vue'
 import request from '@/assets/request'
 type UploaderStatus = 'ready' | 'loading' | 'success' | 'error'
+type CheckFunction = (file: File) => boolean
 export default defineComponent({
   name: 'UploaderView',
   props: {
@@ -19,6 +20,9 @@ export default defineComponent({
       type: String,
       required: true,
       default: ''
+    },
+    beforeUpload: {
+      type: Function as PropType<CheckFunction>
     }
   },
   setup(props) {
@@ -34,6 +38,13 @@ export default defineComponent({
       const currentTarget = (e.target as HTMLInputElement)
       if(currentTarget.files) {
         const files = Array.from(currentTarget.files)
+        if(props.beforeUpload) {
+          const result = props.beforeUpload(files[0])
+          // false说明没通过
+          if(!result) {
+            return
+          }
+        }
         const formData = new FormData()
         formData.append('file', files[0])
         filesStatus.value = 'loading'

@@ -1,6 +1,6 @@
 <template>
     <div class="home-page">
-    <uploader action="/upload"></uploader>
+    <uploader :before-upload="beforeUpload" action="/upload"></uploader>
     <section class="py-5 text-center container">
       <div class="row py-lg-5">
         <div class="col-lg-6 col-md-8 mx-auto">
@@ -24,6 +24,7 @@ import { useStore } from 'vuex'
 import { GlobalDataProps } from '@/store'
 import ColumnList from '@/components/ColumnList.vue'
 import Uploader from '@/components/Uploader.vue'
+import createMessage from '@/hooks/createMessage'
 export default defineComponent({
   name: 'HomePage',
   components: {
@@ -32,6 +33,15 @@ export default defineComponent({
   },
   setup() {
     const store = useStore<GlobalDataProps>()
+    const beforeUpload = (file: File) => {
+      const imgType = file.type.split('/')[0]
+      if(imgType === 'image') {
+        return true
+      }
+      createMessage('只能上传jpg、jpeg、png类型图片', 'error', 2000)
+      return false
+
+    }
     onMounted(() => {
       store.dispatch('fetchColumns')
     })
@@ -39,6 +49,7 @@ export default defineComponent({
     const biggerColumnLen = computed(() => store.getters.biggerColumnLen)
     return {
       list,
+      beforeUpload,
       biggerColumnLen
     }
   }
