@@ -51,7 +51,10 @@ router.beforeEach((to, from, next) => {
       store.dispatch('fetchCurrentUser').then(() => {
         if(isLoginPage) {
           next('/')
+        } else if(loginAuto) {
+          next()
         } else {
+          store.commit('setLoginOut')
           next()
         }
       })
@@ -66,6 +69,7 @@ router.beforeEach((to, from, next) => {
   } else if(isLoginPage) {
     next('/')
   } else {
+    store.commit('setLoginOut')
     next()
   }
 })
