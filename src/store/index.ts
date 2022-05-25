@@ -22,19 +22,20 @@ export interface ResponType<T = never> {
   data: T
 }
 export interface PostProps {
-  _id: string,
+  _id?: string,
   title: string,
   excerpt?: string,
   content?: string,
-  image?: ImgProps,
-  createdAt: string,
+  image?: ImgProps | string,
+  createdAt?: string,
   column: string
+  author?: string
 }
 export interface UserProps {
   isLogin: boolean,
   nickName?: string,
   _id?: number,
-  _column?: number,
+  column?: string,
   email?: string
 }
 export interface ImgProps {
@@ -130,6 +131,9 @@ const store = createStore<GlobalDataProps>({
     },
     fetchCurrentUser({ commit }) {
       return getAndCommit('/user/current', 'setUser', commit)
+    },
+    createPost({ commit }, data) {
+      return postAndCommit('/posts', 'createPost', commit, data)
     },
     // 组合actions
     loginAndFetch({ dispatch }, loginData) {

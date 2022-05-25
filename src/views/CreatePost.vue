@@ -36,9 +36,11 @@ import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import Uploader from '@/components/Uploader.vue'
 import VaildateForm from '@/components/VaildateForm.vue'
-import { GlobalDataProps } from '@/store'
+import { GlobalDataProps, ResponType, ImgProps, PostProps } from '@/store'
 import ValidateInput from '@/components/ValidateInput.vue'
 import { RulesProps } from '@/assets/rules'
+import checkUpload from '@/hooks/commFuncHooks'
+import createMessage from '@/hooks/createMessage'
 export default defineComponent({
   components: {
     Uploader,
@@ -48,6 +50,7 @@ export default defineComponent({
   setup() {
     const route = useRouter()
     const store = useStore<GlobalDataProps>()
+    let imgId = ''
     const titleVal = ref('')
     const contentRules: RulesProps = [
       {
@@ -61,31 +64,41 @@ export default defineComponent({
     ]
     const contentVal = ref('')
     const beforeUpload = (file: File) => {
-      const type = file.type.split('/')
-      return type.includes('image')
+      const result = checkUpload(file, { size: 2, format: ['image/jpg', 'image/png'] })
+      const { passed, errorType } = result
+      if(errorType === 'format') {
+        createMessage('图片类型不正确', 'error')
+      }
+      if(errorType === 'size') {
+        createMessage('图片超出大小限制', 'error')
+      }
+      return passed
     }
-    const uploadedTap = (res: any) => {
-      console.log(res)
+    const uploadedTap = (res: ResponType<ImgProps>) => {
+      if(res.data._id) {
+        imgId = String(res.data._id)
+      }
+
     }
     const onFormSubmit = (result: boolean) => {
-
-      /*
-       * const { column } = store.state.user
-       * if(column) {
-       *   const newPost: PostProps = {
-       *     id: new Date().getTime(),
-       *     title: titleVal.value,
-       *     content: contentVal.value,
-       *     column,
-       *     createdAt: new Date().toLocaleString()
-       *   }
-       *   store.commit('createPost', newPost)
-       *   route.push({
-       *     name: 'ColumnDetail',
-       *     params: { id: column }
-       *   })
-       * }
-       */
+      if(!result) {
+        const { column, _id } = store.state.user
+        const newPost: PostProps = {
+          title: titleVal.value,
+          content: contentVal.value,
+          column: String(column),
+          author: String(_id),
+        }
+        if(imgId) {
+          newPost.image = imgId
+        }
+        store.dispatch('createPost', newPost).then(() => {
+          createMessage('发表成功，2秒后跳转到文章', 'success', 2000)
+          setTimeout(() => {
+            route.push({ name: 'ColumnDetail', params: { id: column } })
+          }, 2000)
+        })
+      }
     }
     return {
       uploadedTap,

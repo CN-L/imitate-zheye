@@ -66,8 +66,8 @@ export default defineComponent({
           await apiRegister(_form)
           createMessage('注册成功', 'success', 2000)
           router.push({ name: 'Login' })
-        } catch (error) {
-          console.log(error, '2')
+        } catch (error: any) {
+          createMessage(error, 'error', 2000)
         }
       }
     }
