@@ -1,7 +1,7 @@
 <template>
   <div class="create-post-page">
     <h4>新建文章</h4>
-    <uploader class="d-flex text-secondary w-100 my-4 bg-light align-items-center justify-content-center" :before-upload="beforeUpload" action="/upload" @file-uploaded="uploadedTap">
+    <uploader @remove-uploaded="removeImg" class="d-flex text-secondary w-100 my-4 bg-light align-items-center justify-content-center" :before-upload="beforeUpload" action="/upload" @file-uploaded="uploadedTap">
       <h2>点击上传头图</h2>
       <template v-slot:loading>
         <div class="d-flex">
@@ -80,6 +80,9 @@ export default defineComponent({
       }
 
     }
+    const removeImg = () => {
+      imgId = ''
+    }
     const onFormSubmit = (result: boolean) => {
       if(!result) {
         const { column, _id } = store.state.user
@@ -102,6 +105,7 @@ export default defineComponent({
     }
     return {
       uploadedTap,
+      removeImg,
       beforeUpload,
       titleRules,
       contentRules,

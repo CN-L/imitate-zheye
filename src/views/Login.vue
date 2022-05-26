@@ -20,13 +20,13 @@
   </div>
 </template>
 <script lang='ts'>
-import { defineComponent, reactive, ref } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import createMessage from '@/hooks/createMessage'
 import ValidateInput from '@/components/ValidateInput.vue'
 import ValidateForm from '@/components/VaildateForm.vue'
-import rulesForm, { RulesProps, TagType } from '@/assets/rules'
+import rulesForm, { RulesProps } from '@/assets/rules'
 export default defineComponent({
   name: 'LoginPage',
   components: {
