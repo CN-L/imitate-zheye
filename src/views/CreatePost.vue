@@ -1,7 +1,6 @@
 <template>
   <div class="create-post-page">
-    <h4>新建文章</h4>
-    {{titleVal}}
+    <h4>{{isEditMode ? '编辑文章' : '新建文章'}}</h4>
     <uploader :uploaded="uploaded" @remove-uploaded="removeImg" class="d-flex text-secondary w-100 my-4 bg-light align-items-center justify-content-center" :before-upload="beforeUpload" action="/upload" @file-uploaded="uploadedTap">
       <h2>点击上传头图</h2>
       <template v-slot:loading>
@@ -26,7 +25,9 @@
         <validate-input type="text" tag="textarea" rows="10" placeholder="请输入文章详情" :rules="contentRules" v-model:emailVal="contentVal"></validate-input>
       </div>
       <template #submitNode>
-        <button class="btn btn-primary btn-large">发表文章</button>
+        <button class="btn btn-primary btn-large">
+          {{isEditMode? '编辑' : '发表'}}文章
+          </button>
       </template>
     </vaildate-form>
   </div>
@@ -99,7 +100,12 @@ export default defineComponent({
         if(imgId) {
           newPost.image = imgId
         }
-        store.dispatch('createPost', newPost).then(() => {
+        const actionName = isEditMode ? 'updatePost' : 'createPost'
+        const sendData = isEditMode ? {
+          id: route.query.id,
+          data: newPost
+        } : newPost
+        store.dispatch(actionName, sendData).then(() => {
           createMessage('发表成功，2秒后跳转到文章', 'success', 2000)
           setTimeout(() => {
             router.push({ name: 'ColumnDetail', params: { id: column } })
@@ -125,6 +131,7 @@ export default defineComponent({
       uploadedTap,
       removeImg,
       beforeUpload,
+      isEditMode,
       titleRules,
       contentRules,
       titleVal,

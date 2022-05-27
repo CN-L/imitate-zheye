@@ -1,6 +1,7 @@
 
 import { createStore, Commit } from 'vuex'
 import request from '@/assets/request'
+import axios, { AxiosRequestConfig } from 'axios'
 const getAndCommit = async (url: string, mutationsName: string, commit: Commit) => {
   const { data } = await request.get(url)
   commit(mutationsName, data)
@@ -13,6 +14,11 @@ export interface GloablErrorProps {
 }
 const postAndCommit = async (url: string, mutationsName: string, commit: Commit, payLoad: any) => {
   const { data } = await request.post(url, payLoad)
+  commit(mutationsName, data)
+  return data
+}
+const asyncAndCommit = async(url: string, mutationsName: string, commit: Commit, config: AxiosRequestConfig = { method: 'get' }) => {
+  const { data } = await request(url, config)
   commit(mutationsName, data)
   return data
 }
@@ -84,6 +90,15 @@ const store = createStore<GlobalDataProps>({
     currendPostDetail: state => (cid: string) => state.posts.filter(post => post._id = cid)
   },
   mutations: {
+    updatePost(state, { data }) {
+      state.posts = state.posts.map(post => {
+        if(post._id === data._id) {
+          return data
+        }
+        return post
+
+      } )
+    },
     setError(state, data: GloablErrorProps) {
       state.error = data
     },
@@ -148,6 +163,13 @@ const store = createStore<GlobalDataProps>({
     // 文章详情
     getAritcle({ commit }, id) {
       return getAndCommit(`/posts/${id}`, 'getPostDetail', commit)
+    },
+    // 文章修改编辑
+    updatePost({ commit }, { id, data }) {
+      return asyncAndCommit(`/posts/${id}`, 'updatePost', commit, {
+        method: 'patch',
+        data
+      })
     }
 
   }
