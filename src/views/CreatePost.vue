@@ -18,11 +18,11 @@
     <vaildate-form @form-submit="onFormSubmit">
       <div class="mb-3">
         <label class="form-label">文章标题：</label>
-        <validate-input placeholder="请输入文章标题" type="text" :rules="titleRules" v-model:emailVal="titleVal"></validate-input>
+        <validate-input v-model="contentVal" placeholder="请输入文章标题" type="text" :rules="titleRules" v-model:emailVal="titleVal"></validate-input>
       </div>
       <div class="mb-3">
         <label class="form-label">文章详情：</label>
-        <textarea ref="textArea"></textarea>
+        <editor :config="editorOptions" v-model="contentVal"></editor>
         <!-- <validate-input type="text" tag="textarea" rows="10" placeholder="请输入文章详情" :rules="contentRules" v-model:emailVal="contentVal"></validate-input> -->
       </div>
       <template #submitNode>
@@ -37,7 +37,7 @@
 import { defineComponent, onMounted, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import EasyMde from 'easymde'
+import { Options } from 'easymde'
 import Uploader from '@/components/Uploader.vue'
 import VaildateForm from '@/components/VaildateForm.vue'
 import { GlobalDataProps, ResponType, ImgProps, PostProps } from '@/store'
@@ -45,9 +45,11 @@ import ValidateInput from '@/components/ValidateInput.vue'
 import { RulesProps } from '@/assets/rules'
 import checkUpload from '@/hooks/commFuncHooks'
 import createMessage from '@/hooks/createMessage'
+import Editor from '@/components/Editor.vue'
 export default defineComponent({
   components: {
     Uploader,
+    Editor,
     VaildateForm,
     ValidateInput
   },
@@ -116,10 +118,10 @@ export default defineComponent({
         })
       }
     }
+    const editorOptions: Options = {
+      spellChecker: false
+    }
     onMounted(() => {
-      if(textArea.value) {
-        const easyMDE = new EasyMde({ element: textArea.value })
-      }
       if(isEditMode) {
         store.dispatch('getAritcle', route.query.id).then((res: ResponType<PostProps<ImgProps>>) => {
           const currentPost = res.data
@@ -134,6 +136,7 @@ export default defineComponent({
       }
     })
     return {
+      editorOptions,
       uploadedTap,
       removeImg,
       beforeUpload,
