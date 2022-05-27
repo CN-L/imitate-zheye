@@ -22,7 +22,8 @@
       </div>
       <div class="mb-3">
         <label class="form-label">文章详情：</label>
-        <validate-input type="text" tag="textarea" rows="10" placeholder="请输入文章详情" :rules="contentRules" v-model:emailVal="contentVal"></validate-input>
+        <textarea ref="textArea"></textarea>
+        <!-- <validate-input type="text" tag="textarea" rows="10" placeholder="请输入文章详情" :rules="contentRules" v-model:emailVal="contentVal"></validate-input> -->
       </div>
       <template #submitNode>
         <button class="btn btn-primary btn-large">
@@ -36,6 +37,7 @@
 import { defineComponent, onMounted, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
+import EasyMde from 'easymde'
 import Uploader from '@/components/Uploader.vue'
 import VaildateForm from '@/components/VaildateForm.vue'
 import { GlobalDataProps, ResponType, ImgProps, PostProps } from '@/store'
@@ -54,6 +56,7 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
     const store = useStore<GlobalDataProps>()
+    const textArea = ref<null | HTMLTextAreaElement>(null)
     let imgId = ''
     const isEditMode = !!route.query.id // 是否为编辑模式
     const titleVal = ref('')
@@ -114,6 +117,9 @@ export default defineComponent({
       }
     }
     onMounted(() => {
+      if(textArea.value) {
+        const easyMDE = new EasyMde({ element: textArea.value })
+      }
       if(isEditMode) {
         store.dispatch('getAritcle', route.query.id).then((res: ResponType<PostProps<ImgProps>>) => {
           const currentPost = res.data
@@ -137,6 +143,7 @@ export default defineComponent({
       titleVal,
       contentVal,
       uploaded,
+      textArea,
       onFormSubmit
     }
   },
