@@ -135,6 +135,9 @@ const store = createStore<GlobalDataProps>({
       localStorage.clear()
       state.token = ''
       state.user.isLogin = false
+    },
+    deletePost(state, { data }) {
+      state.posts = state.posts.filter(post => post._id !== data.id)
     }
   },
   actions: {
@@ -169,6 +172,11 @@ const store = createStore<GlobalDataProps>({
       return asyncAndCommit(`/posts/${id}`, 'updatePost', commit, {
         method: 'patch',
         data
+      })
+    },
+    deletePost({ commit }, id ) {
+      return asyncAndCommit(`/posts/${id}`, 'deletePost', commit, {
+        method: 'delete'
       })
     }
 
