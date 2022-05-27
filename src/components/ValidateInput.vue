@@ -1,13 +1,13 @@
 <template>
   <div class="validate-input-container pb-3">
-    <input v-if="tag !== 'textarea'" v-bind="$attrs" @blur="validateEmail" @input="iptChangeTap" :value="iptRef.val" :class="{'is-invalid': iptRef.error}" class="form-control">
-    <textarea v-else @blur="validateEmail" :class="{'is-invalid': iptRef.error}" class="form-control" :value="iptRef.val" @input="iptChangeTap" v-bind="$attrs">
+    <input v-if="tag !== 'textarea'" v-bind="$attrs" @blur="validateEmail" v-model="iptRef.val" :class="{'is-invalid': iptRef.error}" class="form-control">
+    <textarea v-else @blur="validateEmail" :class="{'is-invalid': iptRef.error}" class="form-control" v-model="iptRef.val" v-bind="$attrs">
     </textarea>
     <span class="invalid-feedback" v-if="iptRef.error">{{iptRef.message}}</span>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, PropType, onMounted } from 'vue'
+import { defineComponent, reactive, PropType, onMounted, computed } from 'vue'
 import { emitter } from '@/components/VaildateForm.vue'
 import { RulesProps, TagType } from '@/assets/rules'
 export default defineComponent({
@@ -28,7 +28,12 @@ export default defineComponent({
   setup(props, { emit }) {
     const emailReg = /^\w+@[a-zA-Z0-9]{2,10}(?:\.[a-z]{2,4}){1,3}$/
     const iptRef = reactive({
-      val: props.emailVal || '',
+      val: computed({
+        get: () => props.emailVal || '',
+        set: val => {
+          emit('update:emailVal', val)
+        }
+      }),
       error: false,
       message: ''
     })
@@ -70,15 +75,17 @@ export default defineComponent({
       }
       return false
     }
-    const iptChangeTap = (e: Event) => {
-      const currentVal = (e.target as HTMLInputElement).value
-      iptRef.val = currentVal
-      emit('update:emailVal', currentVal)
-    }
-    // 清input
+
+    /*
+     * const iptChangeTap = (e: Event) => {
+     *   const currentVal = (e.target as HTMLInputElement).value
+     *   iptRef.val = currentVal
+     *   emit('update:emailVal', currentVal)
+     * }
+     */
     const clearValus = () => {
       iptRef.val = ''
-      emit('update:emailVal', iptRef.val)
+      // emit('update:emailVal', iptRef.val)
     }
     onMounted(() => {
       emitter.emit('form-item-created', validateEmail)
@@ -87,7 +94,7 @@ export default defineComponent({
     return {
       iptRef,
       clearValus,
-      iptChangeTap, // 输入事件 更新父组件
+      // iptChangeTap, // 输入事件 更新父组件
       validateEmail // 验证表单事件
     }
   },

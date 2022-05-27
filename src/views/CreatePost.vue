@@ -1,7 +1,8 @@
 <template>
   <div class="create-post-page">
     <h4>新建文章</h4>
-    <uploader @remove-uploaded="removeImg" class="d-flex text-secondary w-100 my-4 bg-light align-items-center justify-content-center" :before-upload="beforeUpload" action="/upload" @file-uploaded="uploadedTap">
+    {{titleVal}}
+    <uploader :uploaded="uploaded" @remove-uploaded="removeImg" class="d-flex text-secondary w-100 my-4 bg-light align-items-center justify-content-center" :before-upload="beforeUpload" action="/upload" @file-uploaded="uploadedTap">
       <h2>点击上传头图</h2>
       <template v-slot:loading>
         <div class="d-flex">
@@ -31,8 +32,8 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { defineComponent, onMounted, ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import Uploader from '@/components/Uploader.vue'
 import VaildateForm from '@/components/VaildateForm.vue'
@@ -48,9 +49,12 @@ export default defineComponent({
     ValidateInput
   },
   setup() {
-    const route = useRouter()
+    const uploaded = ref()
+    const router = useRouter()
+    const route = useRoute()
     const store = useStore<GlobalDataProps>()
     let imgId = ''
+    const isEditMode = !!route.query.id // 是否为编辑模式
     const titleVal = ref('')
     const contentRules: RulesProps = [
       {
@@ -98,11 +102,25 @@ export default defineComponent({
         store.dispatch('createPost', newPost).then(() => {
           createMessage('发表成功，2秒后跳转到文章', 'success', 2000)
           setTimeout(() => {
-            route.push({ name: 'ColumnDetail', params: { id: column } })
+            router.push({ name: 'ColumnDetail', params: { id: column } })
           }, 2000)
         })
       }
     }
+    onMounted(() => {
+      if(isEditMode) {
+        store.dispatch('getAritcle', route.query.id).then((res: ResponType<PostProps<ImgProps>>) => {
+          const currentPost = res.data
+          titleVal.value = currentPost.title
+          if(currentPost.content) {
+            contentVal.value = currentPost.content
+          }
+          if(currentPost.image) {
+            uploaded.value = { data: currentPost.image }
+          }
+        })
+      }
+    })
     return {
       uploadedTap,
       removeImg,
@@ -111,6 +129,7 @@ export default defineComponent({
       contentRules,
       titleVal,
       contentVal,
+      uploaded,
       onFormSubmit
     }
   },

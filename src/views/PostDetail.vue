@@ -4,12 +4,15 @@
       <img v-if="currentPost.image && (typeof currentPost.image !== 'string')" :src="currentPost.image && currentPost.image.url" alt="...">
     </div>
     <h2>{{currentPost.title}}</h2>
-    <div class="d-flex align-items-center justify-content-between">
+    <div class="post-container-author d-flex border-top border-bottom align-items-center justify-content-between">
       <user-profile v-if="(typeof currentPost.author !== 'string')" :userInfo="currentPost.author"></user-profile>
       <div class="text-secondary">{{currentPost.createdAt}}</div>
     </div>
-    <!-- {{currentPost.content}} -->
     <div v-html="currentPost.content" class="mt-3"></div>
+    <div v-if="showEditArea" class="btn-group mt-5">
+     <router-link :to="{name: 'CreatePage', query: {id: currentPost._id}}" type="button" class="btn btn-success">编辑</router-link>
+      <button type="button" class="btn btn-danger">删除</button>
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -35,6 +38,15 @@ export default defineComponent({
       }
       return currentPost
     })
+    const showEditArea = computed(() => {
+      const { isLogin, _id } = store.state.user
+      if(currentPost.value && currentPost.value.author && isLogin) {
+        const postAuthor = currentPost.value.author as userPorps
+        return postAuthor._id === _id
+      }
+      return false
+
+    })
 
     /*
      * const currentHTML = computed(() => {
@@ -53,6 +65,7 @@ export default defineComponent({
     })
     return {
       postId,
+      showEditArea,
       // currentHTML,
       currentPost
     }
@@ -64,6 +77,9 @@ export default defineComponent({
   width: 80vw;
   height: 100%;
   margin: 0 auto;
+}
+.post-container-author {
+  padding: 16px 0;
 }
   .post-container-img {
     height: 200px;

@@ -118,3 +118,39 @@ const triggerUpload = () => {
 <!--  上传前的检查通过props传过来的function -->
 ```
 
+如果想根据某个值是否存在而返回布尔值：那么可以下面这么做
+
+```typescript
+const isEditMode = !!route.query.id // 是否为编辑模式
+```
+
+关于wath监听props上的属性或者reactive上的属性
+
+```typescript
+const state = reactive({ count: 0 })
+watch(
+  () => state.count,
+  (count, prevCount) => {
+    /* ... */
+  }
+)
+```
+
+关于优化input组件：编辑修改时触发watch，和@input两个事件
+
+```typescript
+1.原本子组件props接收父组件v-model的值，通过@input触发父组件方法更新input
+2.watch函数监听父组件props的值，并及时更新，但这样会触发watch和@input
+<!--优化办法： computed方法，在set中调用父组件Function,原本@input触发emit方法就可以删除，但是还是需要展示value以及@input时候做绑定，那么刚好v-model等同于他们
+const iptRef = reactive({
+      val: computed({
+        get: () => props.emailVal || '',
+        set: val => {
+          emit('update:emailVal', val)
+        }
+      }),
+      error: false,
+      message: ''
+    })
+```
+
