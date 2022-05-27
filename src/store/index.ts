@@ -21,7 +21,7 @@ export interface ResponType<T = never> {
   msg: string,
   data: T
 }
-export interface PostProps {
+export interface PostProps<T = null>{
   _id?: string,
   title: string,
   excerpt?: string,
@@ -29,7 +29,7 @@ export interface PostProps {
   image?: ImgProps | string,
   createdAt?: string,
   column: string
-  author?: string
+  author?: string | T
 }
 export interface UserProps {
   isLogin: boolean,
@@ -49,6 +49,7 @@ export interface GlobalDataProps {
   columns: ColumnProps[],
   posts: PostProps[],
   user: UserProps,
+  currentPost: PostProps,
   loading: boolean
 }
 export interface ColumnProps {
@@ -68,6 +69,7 @@ const store = createStore<GlobalDataProps>({
       loading: false,
       columns: [] as ColumnProps[],
       posts: [] as PostProps[],
+      currentPost: {} as PostProps,
       user: {
         isLogin: false
       }
@@ -78,7 +80,8 @@ const store = createStore<GlobalDataProps>({
   getters: {
     biggerColumnLen: state => state.columns.filter(c => c._id > 2).length,
     getColumnById: state => (id: number) => state.columns.find(todo => todo._id === id),
-    getPostNyCid: state => (cid: string) => state.posts.filter(post => post.column === cid)
+    getPostNyCid: state => (cid: string) => state.posts.filter(post => post.column === cid),
+    currendPostDetail: state => (cid: string) => state.posts.filter(post => post._id = cid)
   },
   mutations: {
     setError(state, data: GloablErrorProps) {
@@ -109,6 +112,9 @@ const store = createStore<GlobalDataProps>({
       state.token = token
       request.defaults.headers.common['Authorization'] = `Bearer ${token}`
     },
+    getPostDetail(state, data) {
+      state.currentPost = data.data
+    },
     // 退出登陆
     setLoginOut(state) {
       localStorage.clear()
@@ -138,6 +144,10 @@ const store = createStore<GlobalDataProps>({
     // 组合actions
     loginAndFetch({ dispatch }, loginData) {
       return dispatch('login', loginData).then(() => dispatch('fetchCurrentUser'))
+    },
+    // 文章详情
+    getAritcle({ commit }, id) {
+      return getAndCommit(`/posts/${id}`, 'getPostDetail', commit)
     }
 
   }

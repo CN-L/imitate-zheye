@@ -38,6 +38,12 @@ const router = createRouter({
       path: '/register',
       name: 'Register',
       component: import('@/views/Signup.vue')
+    },
+    {
+      path: '/postdetail/:id',
+      name: 'PostDetail',
+      meta: { loginAuto: true },
+      component: import('@/views/PostDetail.vue')
     }
   ],
   history: createWebHistory(),

@@ -1,4 +1,4 @@
-import createMessage from '@/hooks/createMessage'
+
 // 通用的东西
 interface Checkcondiction {
   format?: string[],
