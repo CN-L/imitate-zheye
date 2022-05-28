@@ -63,7 +63,6 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
     const store = useStore<GlobalDataProps>()
-    // const textArea = ref<null | HTMLTextAreaElement>(null)
     let imgId = ''
     const isEditMode = !!route.query.id // 是否为编辑模式
     const titleVal = ref('')
@@ -143,7 +142,7 @@ export default defineComponent({
     }
     onMounted(() => {
       if(editorRef.value) {
-        console.log(editorRef.value.getMDEInstance, '你他妈的说啥呢')
+        console.log(editorRef.value.getMDEInstance(), '你他妈的说啥呢')
       }
       if(isEditMode) {
         store.dispatch('getAritcle', route.query.id).then((res: ResponType<PostProps<ImgProps>>) => {
@@ -160,6 +159,7 @@ export default defineComponent({
     })
     return {
       checkEditor,
+      editorRef,
       editorOptions,
       uploadedTap,
       removeImg,

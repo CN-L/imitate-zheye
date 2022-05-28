@@ -61,10 +61,10 @@ const clear = () => {
     easyMDEInstance.value('')
   }
 }
-const getMEDInstance = () => easyMDEInstance
+const getMDEInstance = () => easyMDEInstance
 defineExpose({
   clear,
-  getMEDInstance
+  getMDEInstance
 })
 onUnmounted(() => {
   if(easyMDEInstance) {
