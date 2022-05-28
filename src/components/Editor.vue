@@ -1,47 +1,51 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
+{{innerVal}}
   <div class="vue-asycmd-editor">
-    <textarea ref="textArea"></textarea>
+    <textarea ref="textAreaRef"></textarea>
   </div>
 </template>
 <script lang="ts" setup>
 import EasyMDE, { Options } from 'easymde'
-import { defineProps, defineEmits, ref, onMounted, onUnmounted } from 'vue'
+import { defineProps, defineEmits, ref, onMounted, onUnmounted, watch } from 'vue'
 // 类型、属性以及事件
 interface EditorProps {
-  modalValue?: string,
+  modelValue?: string,
   config? : Options
 }
-interface EditorInstance {
-  clear: () => void,
-  getMDEInstance: () => EasyMDE | null
-}
 interface EditorEvents {
-  (type: 'update:modalValue', value: string): void
+  (type: 'update:modelValue', value: string): void
   (type: 'change', value: string): void
   (type: 'blur'): void
 }
 const props = defineProps<EditorProps>()
 const emit = defineEmits<EditorEvents>()
-const textArea = ref<HTMLTextAreaElement | null>(null)
+const textAreaRef = ref<HTMLTextAreaElement | null>(null)
 let easyMDEInstance: EasyMDE | null = null
-const innerVal = ref(props.modalValue || '')
+const innerVal = ref(props.modelValue || '')
+watch(() => props.modelValue, newValue => {
+  if(easyMDEInstance) {
+    if(newValue !== innerVal.value) {
+      easyMDEInstance.value(newValue || '')
+    }
+  }
+})
 onMounted(() => {
-  if(textArea.value) {
+  if(textAreaRef.value) {
     // 组装options
-    const config: Options = {
+    const options: Options = {
       ...(props.config || {}),
-      element: textArea.value,
+      element: textAreaRef.value,
       initialValue: innerVal.value
     }
-    easyMDEInstance = new EasyMDE(config)
+    easyMDEInstance = new EasyMDE(options)
     // 监控对应的事件
     easyMDEInstance.codemirror.on('change', () => {
       if(easyMDEInstance) {
         // 拿到当前的值
         const updated = easyMDEInstance.value()
         innerVal.value = updated
-        emit('update:modalValue', updated)
+        emit('update:modelValue', updated)
         emit('change', updated)
       }
     })

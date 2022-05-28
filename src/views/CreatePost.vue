@@ -18,12 +18,12 @@
     <vaildate-form @form-submit="onFormSubmit">
       <div class="mb-3">
         <label class="form-label">文章标题：</label>
-        <validate-input v-model="contentVal" placeholder="请输入文章标题" type="text" :rules="titleRules" v-model:emailVal="titleVal"></validate-input>
+        <validate-input placeholder="请输入文章标题" type="text" :rules="titleRules" v-model:emailVal="titleVal"></validate-input>
       </div>
       <div class="mb-3">
         <label class="form-label">文章详情：</label>
-        <editor :config="editorOptions" v-model="contentVal"></editor>
-        <!-- <validate-input type="text" tag="textarea" rows="10" placeholder="请输入文章详情" :rules="contentRules" v-model:emailVal="contentVal"></validate-input> -->
+        <editor :class="{'is-invalid': !editStatus.isValid}" @blur="checkEditor" ref="editorRef" :config="editorOptions" v-model="contentVal"></editor>
+        <span class="invalid-feedback mt-1" v-if="!editStatus.isValid">{{editStatus.message}}</span>
       </div>
       <template #submitNode>
         <button class="btn btn-primary btn-large">
@@ -63,7 +63,7 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
     const store = useStore<GlobalDataProps>()
-    const textArea = ref<null | HTMLTextAreaElement>(null)
+    // const textArea = ref<null | HTMLTextAreaElement>(null)
     let imgId = ''
     const isEditMode = !!route.query.id // 是否为编辑模式
     const titleVal = ref('')
@@ -99,7 +99,8 @@ export default defineComponent({
       imgId = ''
     }
     const onFormSubmit = (result: boolean) => {
-      if(!result) {
+      checkEditor()
+      if(!result && editStatus.isValid) {
         const { column, _id } = store.state.user
         const newPost: PostProps = {
           title: titleVal.value,
@@ -138,10 +139,11 @@ export default defineComponent({
         editStatus.isValid = true
         editStatus.message = ''
       }
+      console.log(editStatus, '我是拓宝软件的爹')
     }
     onMounted(() => {
       if(editorRef.value) {
-        console.log(editorRef.value.getMDEInstance)
+        console.log(editorRef.value.getMDEInstance, '你他妈的说啥呢')
       }
       if(isEditMode) {
         store.dispatch('getAritcle', route.query.id).then((res: ResponType<PostProps<ImgProps>>) => {
@@ -157,23 +159,28 @@ export default defineComponent({
       }
     })
     return {
+      checkEditor,
       editorOptions,
       uploadedTap,
       removeImg,
       beforeUpload,
+      editStatus,
       isEditMode,
       titleRules,
       contentRules,
       titleVal,
       contentVal,
       uploaded,
-      textArea,
       onFormSubmit
     }
   },
 })
 </script>
 <style>
+/* 并且 */
+.vue-asycmd-editor.is-invalid {
+  border: 1px solid #dc3545;
+}
 .create-post-page {
   box-sizing: border-box;
   padding: 16px;

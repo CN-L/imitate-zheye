@@ -8,7 +8,7 @@
       <user-profile v-if="(typeof currentPost.author !== 'string')" :userInfo="currentPost.author"></user-profile>
       <div class="text-secondary">{{currentPost.createdAt}}</div>
     </div>
-    <div v-html="currentPost.content" class="mt-3"></div>
+    <div v-html="currentHTML" class="mt-3"></div>
     <div v-if="showEditArea" class="btn-group mt-5">
      <router-link :to="{name: 'CreatePage', query: {id: currentPost._id}}" type="button" class="btn btn-success">编辑</router-link>
       <button type="button" @click.prevent="modalShow = true" class="btn btn-danger">删除</button>
@@ -27,6 +27,7 @@ import Modal from '@/components/Modal.vue'
 import { PostProps, ResponType } from '@/store'
 import createMessage from '@/hooks/createMessage'
 import router from '@/router'
+import { marked } from 'marked'
 // import MarkDown from 'markdown-it'
 export default defineComponent({
   name: 'postDetail',
@@ -38,15 +39,15 @@ export default defineComponent({
     const modalShow = ref(false)
     // const md = new MarkDown()
 
-    /*
-     * const currentHTML = computed(() => {
-     *   if (currentPost.value && currentPost.value.content) {
-     *     return md.render(currentPost.value.content)
-     *   }
-     *   return null
-     */
 
-    // })
+    const currentHTML = computed(() => {
+      if (currentPost.value && currentPost.value.content) {
+        return marked.parse(currentPost.value.content)
+      }
+      return null
+
+
+    })
     const store = useStore()
     const route = useRoute()
     const postId = computed(() => route.params.id)
@@ -85,7 +86,7 @@ export default defineComponent({
       showEditArea,
       modalShow,
       deleteTap,
-      // currentHTML,
+      currentHTML,
       currentPost
     }
   },
