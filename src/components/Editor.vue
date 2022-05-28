@@ -12,6 +12,10 @@ interface EditorProps {
   modalValue?: string,
   config? : Options
 }
+interface EditorInstance {
+  clear: () => void,
+  getMDEInstance: () => EasyMDE | null
+}
 interface EditorEvents {
   (type: 'update:modalValue', value: string): void
   (type: 'change', value: string): void
@@ -47,6 +51,16 @@ onMounted(() => {
       }
     })
   }
+})
+const clear = () => {
+  if(easyMDEInstance) {
+    easyMDEInstance.value('')
+  }
+}
+const getMEDInstance = () => easyMDEInstance
+defineExpose({
+  clear,
+  getMEDInstance
 })
 onUnmounted(() => {
   if(easyMDEInstance) {

@@ -34,10 +34,10 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onMounted, ref, reactive } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import { Options } from 'easymde'
+import EasyMDE, { Options } from 'easymde'
 import Uploader from '@/components/Uploader.vue'
 import VaildateForm from '@/components/VaildateForm.vue'
 import { GlobalDataProps, ResponType, ImgProps, PostProps } from '@/store'
@@ -46,6 +46,10 @@ import { RulesProps } from '@/assets/rules'
 import checkUpload from '@/hooks/commFuncHooks'
 import createMessage from '@/hooks/createMessage'
 import Editor from '@/components/Editor.vue'
+interface EditorInstance {
+  clear: () => void,
+  getMDEInstance: () => EasyMDE | null
+}
 export default defineComponent({
   components: {
     Uploader,
@@ -54,6 +58,7 @@ export default defineComponent({
     ValidateInput
   },
   setup() {
+    const editorRef = ref<null | EditorInstance>()
     const uploaded = ref()
     const router = useRouter()
     const route = useRoute()
@@ -121,7 +126,23 @@ export default defineComponent({
     const editorOptions: Options = {
       spellChecker: false
     }
+    const editStatus = reactive({
+      isValid: true,
+      message: ''
+    })
+    const checkEditor = () => {
+      if(contentVal.value.trim() === '') {
+        editStatus.isValid = false
+        editStatus.message = '文章详情不能为空'
+      } else {
+        editStatus.isValid = true
+        editStatus.message = ''
+      }
+    }
     onMounted(() => {
+      if(editorRef.value) {
+        console.log(editorRef.value.getMDEInstance)
+      }
       if(isEditMode) {
         store.dispatch('getAritcle', route.query.id).then((res: ResponType<PostProps<ImgProps>>) => {
           const currentPost = res.data
