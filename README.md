@@ -160,3 +160,9 @@ const iptRef = reactive({
 函数式组件适用于在代码逻辑中使用的组件
 ```
 
+注意：如果template使用了setup语法，想暴露组件的方法和属性,参考Editor组件
+
+```vue
+那么我们可以使用defineExpose进行导出
+```
+
