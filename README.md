@@ -166,3 +166,17 @@ const iptRef = reactive({
 那么我们可以使用defineExpose进行导出
 ```
 
+关于开发环境和生产环境
+
+```vue
+开发版本包含完整的警告和调试模式
+生产版本删除了警告，更加稳定
+```
+
+vite为何比vue-cli快（主要说的是开发环境）
+
+```vue
+vue-cli：采用的是webpack打包工具
+vite：采用的是Rollup，类似于过滤了掉落的树叶,使用浏览器的es modules
+```
+
